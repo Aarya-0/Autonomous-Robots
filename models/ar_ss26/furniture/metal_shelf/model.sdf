@@ -1,0 +1,196 @@
+<sdf version="1.6">
+    <model name="metal_shelf">
+        <static>true</static>
+        <!-- Legs of the shelf -->
+        <link name="leg_1">
+            <pose>0.45 -0.205 0.8 0 0 0</pose>
+            <visual name="visual_leg_1">
+                <geometry>
+                    <cylinder>
+                        <radius>0.01</radius>
+                        <length>1.6</length>
+                    </cylinder>
+                </geometry>
+                <material>
+                    <ambient>0.7 0.7 0.7 1</ambient> <!-- Gray color -->
+                </material>
+            </visual>
+            <collision name="collision_leg_1">
+                <geometry>
+                    <cylinder>
+                        <radius>0.01</radius>
+                        <length>1.6</length>
+                    </cylinder>
+                </geometry>
+            </collision>
+        </link>
+        <link name="leg_2">
+            <pose>0.45 0.205 0.8 0 0 0</pose>
+            <visual name="visual_leg_2">
+                <geometry>
+                    <cylinder>
+                        <radius>0.01</radius>
+                        <length>1.6</length>
+                    </cylinder>
+                </geometry>
+                <material>
+                    <ambient>0.7 0.7 0.7 1</ambient>
+                </material>
+            </visual>
+            <collision name="collision_leg_2">
+                <geometry>
+                    <cylinder>
+                        <radius>0.01</radius>
+                        <length>1.6</length>
+                    </cylinder>
+                </geometry>
+            </collision>
+        </link>
+        <link name="leg_3">
+            <pose>-0.45 -0.205 0.8 0 0 0</pose>
+            <visual name="visual_leg_3">
+                <geometry>
+                    <cylinder>
+                        <radius>0.01</radius>
+                        <length>1.6</length>
+                    </cylinder>
+                </geometry>
+                <material>
+                    <ambient>0.7 0.7 0.7 1</ambient>
+                </material>
+            </visual>
+            <collision name="collision_leg_3">
+                <geometry>
+                    <cylinder>
+                        <radius>0.01</radius>
+                        <length>1.6</length>
+                    </cylinder>
+                </geometry>
+            </collision>
+        </link>
+        <link name="leg_4">
+            <pose>-0.45 0.205 0.8 0 0 0</pose>
+            <visual name="visual_leg_4">
+                <geometry>
+                    <cylinder>
+                        <radius>0.01</radius>
+                        <length>1.6</length>
+                    </cylinder>
+                </geometry>
+                <material>
+                    <ambient>0.7 0.7 0.7 1</ambient>
+                </material>
+            </visual>
+            <collision name="collision_leg_4">
+                <geometry>
+                    <cylinder>
+                        <radius>0.01</radius>
+                        <length>1.6</length>
+                    </cylinder>
+                </geometry>
+            </collision>
+        </link>
+
+        <!-- Shelves -->
+        <link name="shelf_1">
+            <pose>0 0 0.05 0 0 0</pose>
+            <visual name="visual_shelf_1">
+                <geometry>
+                    <box>
+                        <size>0.92 0.45 0.02</size>
+                    </box>
+                </geometry>
+                <material>
+                    <ambient>0.7 0.7 0.7 1</ambient>
+                </material>
+            </visual>
+            <collision name="collision_shelf_1">
+                <geometry>
+                    <box>
+                        <size>0.92 0.45 0.02</size>
+                    </box>
+                </geometry>
+            </collision>
+        </link>
+        <link name="shelf_2">
+            <pose>0 0 0.4 0 0 0</pose>
+            <visual name="visual_shelf_2">
+                <geometry>
+                    <box>
+                        <size>0.92 0.45 0.02</size>
+                    </box>
+                </geometry>
+                <material>
+                    <ambient>0.7 0.7 0.7 1</ambient>
+                </material>
+            </visual>
+            <collision name="collision_shelf_2">
+                <geometry>
+                    <box>
+                        <size>0.92 0.45 0.02</size>
+                    </box>
+                </geometry>
+            </collision>
+        </link>
+        <link name="shelf_3">
+            <pose>0 0 0.8 0 0 0</pose>
+            <visual name="visual_shelf_3">
+                <geometry>
+                    <box>
+                        <size>0.92 0.45 0.02</size>
+                    </box>
+                </geometry>
+                <material>
+                    <ambient>0.7 0.7 0.7 1</ambient>
+                </material>
+            </visual>
+            <collision name="collision_shelf_3">
+                <geometry>
+                    <box>
+                        <size>0.92 0.45 0.02</size>
+                    </box>
+                </geometry>
+            </collision>
+        </link>
+        <link name="shelf_4">
+            <pose>0 0 1.2 0 0 0</pose>
+            <visual name="visual_shelf_4">
+                <geometry>
+                    <box>
+                        <size>0.92 0.45 0.02</size>
+                    </box>
+                </geometry>
+                <material>
+                    <ambient>0.7 0.7 0.7 1</ambient>
+                </material>
+            </visual>
+            <collision name="collision_shelf_4">
+                <geometry>
+                    <box>
+                        <size>0.92 0.45 0.02</size>
+                    </box>
+                </geometry>
+            </collision>
+        </link>
+        <link name="shelf_5">
+            <pose>0 0 1.6 0 0 0</pose>
+            <visual name="visual_shelf_5">
+                <geometry>
+                    <box>
+                        <size>0.92 0.45 0.02</size>
+                    </box>
+                </geometry>
+                <material>
+                    <ambient>0.7 0.7 0.7 1</ambient>
+                </material>
+            </visual>
+            <collision name="collision_shelf_5">
+                <geometry>
+                    <box>
+                        <size>0.92 0.45 0.02</size>
+                    </box>
+                </geometry>
+            </collision>
+        </link>
+    </model>
+</sdf>

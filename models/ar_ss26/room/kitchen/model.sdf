@@ -1,0 +1,149 @@
+<sdf version="1.6">
+    <model name="kitchen">
+        <static>true</static>
+        <!-- East wall 1 -->
+        <link name="east_wall_1">
+            <pose>2.75 1.25 0.5 0 0 0</pose>
+            <visual name="visual_east_wall_1">
+                <geometry>
+                    <box>
+                        <size>0.02 2.0 1.0</size>
+                    </box>
+                </geometry>
+                <material>
+                    <ambient>1 1 1 1</ambient> <!-- White color, fully opaque -->
+                </material>
+            </visual>
+            <collision name="collision_east_wall_1">
+                <geometry>
+                    <box>
+                        <size>0.02 2.0 1.0</size>
+                    </box>
+                </geometry>
+            </collision>
+        </link>
+        
+        <!-- East wall 2 -->
+        <link name="east_wall_2">
+            <pose>2.75 -1.5 0.5 0 0 0</pose>
+            <visual name="visual_east_wall_2">
+                <geometry>
+                    <box>
+                        <size>0.02 1.5 1.0</size>
+                    </box>
+                </geometry>
+                <material>
+                    <ambient>1 1 1 1</ambient>
+                </material>
+            </visual>
+            <collision name="collision_east_wall_2">
+                <geometry>
+                    <box>
+                        <size>0.02 1.5 1.0</size>
+                    </box>
+                </geometry>
+            </collision>
+        </link>
+
+        <!-- North wall -->
+        <link name="north_wall">
+            <pose>0 2.25 0.5 0 0 0</pose>
+            <visual name="visual_north_wall">
+                <geometry>
+                    <box>
+                        <size>5.5 0.02 1.0</size>
+                    </box>
+                </geometry>
+                <material>
+                    <ambient>1 1 1 1</ambient>
+                </material>
+            </visual>
+            <collision name="collision_north_wall">
+                <geometry>
+                    <box>
+                        <size>5.5 0.02 1.0</size>
+                    </box>
+                </geometry>
+            </collision>
+        </link>
+
+        <!-- South wall 1 -->
+        <link name="south_wall_1">
+            <pose>-1.75 -2.25 0.5 0 0 0</pose>
+            <visual name="visual_south_wall_1">
+                <geometry>
+                    <box>
+                        <size>2.0 0.02 1.0</size>
+                    </box>
+                </geometry>
+                <material>
+                    <ambient>1 1 1 1</ambient>
+                </material>
+            </visual>
+            <collision name="collision_south_wall_1">
+                <geometry>
+                    <box>
+                        <size>2.0 0.02 1.0</size>
+                    </box>
+                </geometry>
+            </collision>
+        </link>
+
+        <!-- South wall 2 -->
+        <link name="south_wall_2">
+            <pose>1.5 -2.25 0.5 0 0 0</pose>
+            <visual name="visual_south_wall_2">
+                <geometry>
+                    <box>
+                        <size>2.5 0.02 1.0</size>
+                    </box>
+                </geometry>
+                <material>
+                    <ambient>1 1 1 1</ambient>
+                </material>
+            </visual>
+            <collision name="collision_south_wall_2">
+                <geometry>
+                    <box>
+                        <size>2.5 0.02 1.0</size>
+                    </box>
+                </geometry>
+            </collision>
+        </link>
+
+        <!-- West wall -->
+        <link name="west_wall">
+            <pose>-2.75 0 0.5 0 0 0</pose>
+            <visual name="visual_west_wall">
+                <geometry>
+                    <box>
+                        <size>0.02 4.5 1.0</size>
+                    </box>
+                </geometry>
+                <material>
+                    <ambient>1 1 1 1</ambient>
+                </material>
+            </visual>
+            <collision name="collision_west_wall">
+                <geometry>
+                    <box>
+                        <size>0.02 4.5 1.0</size>
+                    </box>
+                </geometry>
+            </collision>
+        </link>
+
+        <!-- Furniture -->
+        <include>
+            <uri>model://ar_ss26/furniture/dishwasher</uri>
+            <pose>0 2.0 0 0 0 0</pose>
+            <static>true</static>
+        </include>
+        <include>
+            <uri>model://ar_ss26/furniture/fridge</uri>
+            <pose>2.000000011175871 -1.9487794494628907 0 0 0 0</pose>
+            <static>true</static>
+        </include>
+
+    </model>
+</sdf>

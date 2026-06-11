@@ -1,0 +1,32 @@
+<sdf version="1.6">
+    <model name="ar_ss26_arena">
+        <static>true</static>
+        <!-- Kitchen -->
+        <include>
+            <uri>model://ar_ss26/room/kitchen</uri>
+            <pose>-2.75 2.25 0 0 0 0</pose>
+            <static>true</static>
+        </include>
+        
+        <!-- Living Room -->
+        <include>
+            <uri>model://ar_ss26/room/living_room</uri>
+            <pose>-2.75 -2.25 0 0 0 0</pose>
+            <static>true</static>
+        </include>
+
+        <!-- Dining Room -->
+        <include>
+            <uri>model://ar_ss26/room/dining_room</uri>
+            <pose>1.75 -2.25 0 0 0 0</pose>
+            <static>true</static>
+        </include>
+        
+        <!-- Bed Room -->
+        <include>
+            <uri>model://ar_ss26/room/bed_room</uri>
+            <pose>1.75 2.25 0 0 0 0</pose>
+            <static>true</static>
+        </include>
+    </model>
+</sdf>

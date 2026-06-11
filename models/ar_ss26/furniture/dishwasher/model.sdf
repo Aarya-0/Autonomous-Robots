@@ -1,0 +1,26 @@
+<sdf version="1.6">
+    <model name="dishwasher">
+        <static>true</static>
+        <!-- Body of the dishwasher -->
+        <link name="body">
+            <pose>0 0 0.25 0 0 0</pose>
+            <visual name="visual_body">
+                <geometry>
+                    <box>
+                        <size>0.4 0.4 0.5</size>
+                    </box>
+                </geometry>
+                <material>
+                    <ambient>0.4 0.4 0.4 1</ambient> <!-- Gray color, fully opaque -->
+                </material>
+            </visual>
+            <collision name="collision_body">
+                <geometry>
+                    <box>
+                        <size>0.4 0.4 0.5</size>
+                    </box>
+                </geometry>
+            </collision>
+        </link>
+    </model>
+</sdf>

@@ -1,0 +1,177 @@
+<sdf version="1.6">
+    <model name="sofa">
+        <static>true</static>
+        <!-- Back of the sofa -->
+        <link name="back">
+            <pose>-0.325 0 0.5125 0 0 0</pose>
+            <visual name="visual_back">
+                <geometry>
+                    <box>
+                        <size>0.2 1.77 0.275</size>
+                    </box>
+                </geometry>
+                <material>
+                    <ambient>0.2 0.2 0.2 1</ambient> <!-- Dark grey color -->
+                </material>
+            </visual>
+            <collision name="collision_back">
+                <geometry>
+                    <box>
+                        <size>0.2 1.77 0.275</size>
+                    </box>
+                </geometry>
+            </collision>
+        </link>
+
+        <!-- Left arm of the sofa -->
+        <link name="left_arm">
+            <pose>0.1 -0.8 0.5125 0 0 0</pose>
+            <visual name="visual_left_arm">
+                <geometry>
+                    <box>
+                        <size>0.65 0.17 0.275</size>
+                    </box>
+                </geometry>
+                <material>
+                    <ambient>0.2 0.2 0.2 1</ambient>
+                </material>
+            </visual>
+            <collision name="collision_left_arm">
+                <geometry>
+                    <box>
+                        <size>0.65 0.17 0.275</size>
+                    </box>
+                </geometry>
+            </collision>
+        </link>
+
+        <!-- Right arm of the sofa -->
+        <link name="right_arm">
+            <pose>0.1 0.8 0.5125 0 0 0</pose>
+            <visual name="visual_right_arm">
+                <geometry>
+                    <box>
+                        <size>0.65 0.17 0.275</size>
+                    </box>
+                </geometry>
+                <material>
+                    <ambient>0.2 0.2 0.2 1</ambient>
+                </material>
+            </visual>
+            <collision name="collision_right_arm">
+                <geometry>
+                    <box>
+                        <size>0.65 0.17 0.275</size>
+                    </box>
+                </geometry>
+            </collision>
+        </link>
+
+        <!-- Legs of the sofa -->
+        <link name="leg_1">
+            <pose>-0.345 -0.815 0.0375 0 0 0</pose>
+            <visual name="visual_leg_1">
+                <geometry>
+                    <box>
+                        <size>0.05 0.05 0.075</size>
+                    </box>
+                </geometry>
+                <material>
+                    <ambient>0 0 0 1</ambient> <!-- Black color -->
+                </material>
+            </visual>
+            <collision name="collision_leg_1">
+                <geometry>
+                    <box>
+                        <size>0.05 0.05 0.075</size>
+                    </box>
+                </geometry>
+            </collision>
+        </link>
+
+        <link name="leg_2">
+            <pose>-0.345 0.815 0.0375 0 0 0</pose>
+            <visual name="visual_leg_2">
+                <geometry>
+                    <box>
+                        <size>0.05 0.05 0.075</size>
+                    </box>
+                </geometry>
+                <material>
+                    <ambient>0 0 0 1</ambient>
+                </material>
+            </visual>
+            <collision name="collision_leg_2">
+                <geometry>
+                    <box>
+                        <size>0.05 0.05 0.075</size>
+                    </box>
+                </geometry>
+            </collision>
+        </link>
+
+        <link name="leg_3">
+            <pose>0.365 0.815 0.0375 0 0 0</pose>
+            <visual name="visual_leg_3">
+                <geometry>
+                    <box>
+                        <size>0.05 0.05 0.075</size>
+                    </box>
+                </geometry>
+                <material>
+                    <ambient>0 0 0 1</ambient>
+                </material>
+            </visual>
+            <collision name="collision_leg_3">
+                <geometry>
+                    <box>
+                        <size>0.05 0.05 0.075</size>
+                    </box>
+                </geometry>
+            </collision>
+        </link>
+
+        <link name="leg_4">
+            <pose>0.365 -0.815 0.0375 0 0 0</pose>
+            <visual name="visual_leg_4">
+                <geometry>
+                    <box>
+                        <size>0.05 0.05 0.075</size>
+                    </box>
+                </geometry>
+                <material>
+                    <ambient>0 0 0 1</ambient>
+                </material>
+            </visual>
+            <collision name="collision_leg_4">
+                <geometry>
+                    <box>
+                        <size>0.05 0.05 0.075</size>
+                    </box>
+                </geometry>
+            </collision>
+        </link>
+
+        <!-- Seat of the sofa -->
+        <link name="seat">
+            <pose>0 0 0.225 0 0 0</pose>
+            <visual name="visual_seat">
+                <geometry>
+                    <box>
+                        <size>0.85 1.77 0.3</size>
+                    </box>
+                </geometry>
+                <material>
+                    <ambient>0.2 0.2 0.2 1</ambient> <!-- Dark grey color to match back and arms -->
+                </material>
+            </visual>
+            <collision name="collision_seat">
+                <geometry>
+                    <box>
+                        <size>0.85 1.77 0.3</size>
+                    </box>
+                </geometry>
+            </collision>
+        </link>
+    </model>
+</sdf>

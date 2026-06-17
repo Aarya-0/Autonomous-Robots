@@ -1,0 +1,31 @@
+ros2 launch rwu_tiago_bringup sim_ar_ss26.launch.py   is_public_sim:=True x:=1.0 y:=2.0 yaw:=1.4   navigation:=True slam:=False   map_path:=/root/maps/map.yaml
+exit
+find / -name "rwu_tiago_bringup" -type d 2>/dev/null
+find / -name "setup.bash" 2>/dev/null | grep -v opt/ros
+source /opt/ros/humble/setup.bash
+cd tiago_ws/
+colcon build --symlink-install
+ls
+ls ~/tiago_ws/install/
+ls ~/tiago_ws/install/rwu_tiago_bringup/
+find / -name "local_setup.bash" 2>/dev/null | grep -v opt/ros
+find / -name "_local_setup_util_sh.py" 2>/dev/null | grep -v opt/ros
+cat /root/.bashrc_image 2>/dev/null || cat /etc/bash.bashrc | grep source
+ls /opt/ | grep -v ros
+source /opt/ros/humble/setup.bash
+ros2 pkg list | grep tiago
+cd
+ros2 pkg list | grep tiago
+source /opt/ros/humble/setup.bash
+source ~/tiago_ws/install/setup.bash
+ros2 pkg list | grep tiago
+ls ~/tiago_ws/install/share/ament_index/resource_index/packages/ 2>/dev/null || echo "empty"
+ls ~/tiago_ws/install/rwu_tiago_bringup/
+find ~/tiago_ws/install/rwu_tiago_bringup -name "*.bash" 2>/dev/null
+find /opt /usr/local -name "rwu_tiago_bringup" -type d 2>/dev/null
+dpkg -l | grep tiago 2>/dev/null
+apt list --installed 2>/dev/null | grep tiago
+exit
+ros2 pkg list | grep tiago
+ls ~/tiago_ws/install/share/ament_index/resource_index/packages/
+exit

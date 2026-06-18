@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 
 """
-For waiting:
+Trigger for waiting (3sec.):
 ros2 service call /pause_tf std_srvs/srv/SetBool "{data: true}"
 """
-
 import math
 import rclpy
 import time
+import sys
 from rclpy.node import Node
 from std_srvs.srv import SetBool
 from geometry_msgs.msg import TransformStamped
 from tf2_ros import TransformBroadcaster
+from rclpy.executors import MultiThreadedExecutor
+from rclpy.callback_groups import MutuallyExclusiveCallbackGroup
 
 
 def yaw_to_quaternion(yaw):
@@ -24,7 +26,7 @@ def yaw_to_quaternion(yaw):
 
 
 class TrajectoryTFPublisher(Node):
-    def __init__(self):
+    def __init__(self, start_area=1):
         super().__init__("trajectory_tf_publisher")
 
         self.br = TransformBroadcaster(self)
@@ -33,78 +35,77 @@ class TrajectoryTFPublisher(Node):
         self.child_frame = "target_pose"
 
         self.timer_dt = 0.05
+        self.start_area = start_area
 
         self.areas = [
             {
                 "area_number": 1,
                 "waypoints": [
-                    ((0.0, 0.0), 0.5, (1.0, 0.0)),
-                    ((1.0, 0.0), 0.5, (0.0, 0.5)),
-                    ((0.0, 0.5), 0.5, (-0.2, 2.0)),
+                    ((0.0, 0.0), 0.3, (-0.2, 2.0)),
                 ]
             },
             {
                 "area_number": 2,
                 "waypoints": [
-                    ((-0.2, 2.0), 0.5, (1.0, 2.5)),
-                    ((1.0, 2.5), 0.5, (1.0, 3.0)),
-                    ((1.0, 3.0), 0.5, (1.0, 4.0)),
-                    ((1.0, 4.0), 0.5, (0.0, 5.0)),
-                    ((0.0, 5.0), 0.5, (-1.0, 5.0)),
-                    ((-1.0, 5.0), 0.5, (-2.0, 4.0)),
-                    ((-2.0, 4.0), 0.5, (-2.5, 3.5)),
-                    ((-2.5, 3.5), 0.5, (-3.0, 3.5)),
+                    ((-0.2, 2.0), 0.3, (1.0, 2.5)),
+                    ((1.0, 2.5), 0.3, (1.0, 3.0)),
+                    ((1.0, 3.0), 0.2, (1.0, 4.0)),
+                    ((1.0, 4.0), 0.2, (0.0, 5.0)),
+                    ((0.0, 5.0), 0.2, (-1.0, 5.0)),
+                    ((-1.0, 5.0), 0.3, (-2.0, 4.0)),
+                    ((-2.0, 4.0), 0.3, (-2.5, 3.5)),
+                    ((-2.5, 3.5), 0.3, (-3.0, 3.5)),
                 ]
             },
             {
                 "area_number": 3,
                 "waypoints": [
-                    ((-3.0, 3.5), 0.5, (-4.5, 3.0)),
-                    ((-4.5, 3.0), 0.5, (-4.0, 1.0)),
-                    ((-4.0, 1.0), 0.5, (-4.0, 0.0)),
+                    ((-3.0, 3.5), 0.2, (-6.0, 3.0)),
+                    ((-6.0, 3.0), 0.2, (-3.5, 2.5)),
+                    ((-3.5, 2.5), 0.2, (-4.0, 1.0)),
+                    ((-4.0, 1.0), 0.2, (-4.0, 0.0)),
                 ]
             },
             {
                 "area_number": 4,
                 "waypoints": [
-                    ((-4.0, 0.0), 0.5, (-3.0, 0.0)),
-                    ((-3.0, 0.0), 0.5, (-3.0, -1.0)),
-                    ((-3.0, -1.0), 0.5, (-3.0, -2.0)),
-                    ((-3.0, -2.0), 0.5, (-3.5, -2.5)),
-                    ((-3.5, -2.5), 0.5, (-4.0, -2.5)),
-                    ((-4.0, -2.5), 0.5, (-5.5, -2.5)),
-                    ((-5.5, -2.5), 0.5, (-6.0, -1.0)),
-                    ((-6.0, -1.0), 0.5, (-7.0, -1.2)),
-                    ((-7.0, -1.2), 0.5, (-8.0, -1.4)),
-                    ((-8.0, -1.4), 1.0, (-8.5, -1.5)),
-                    ((-8.5, -1.5), 0.5, (-9.0, -1.5)),
+                    ((-4.0, 0.0), 0.2, (-3.0, 0.0)),
+                    ((-3.0, 0.0), 0.2, (-3.0, -1.0)),
+                    ((-3.0, -1.0), 0.2, (-3.0, -2.0)),
+                    ((-3.0, -2.0), 0.2, (-3.5, -2.5)),
+                    ((-3.5, -2.5), 0.2, (-4.0, -2.5)),
+                    ((-4.0, -2.5), 0.2, (-5.5, -2.5)),
+                    ((-5.5, -2.5), 0.2, (-6.0, -1.0)),
                 ]
             },
             {
                 "area_number": 5,
                 "waypoints": [
-                    ((-9.0, -1.5), 0.5, (-9.0, -1.0)),
-                    ((-9.0, -1.0), 0.1, (-9.0, 0.0)),
-                    ((-9.0, 0.0), 0.5, (-9.0, 3.0)),
-                    ((-9.0, 3.0), 0.5, (-8.0, 3.0)),
-                    ((-8.0, 3.0), 0.5, (-7.0, 1.5)),
-                    ((-7.0, 1.5), 0.5, (-6.0, 1.5)),
+                    ((-6.0, -1.0), 0.2, (-7.0, -1.2)),
+                    ((-7.0, -1.2), 0.2, (-8.0, -1.4)),
+                    ((-8.0, -1.4), 0.3, (-8.5, -1.5)),
+                    ((-8.5, -1.5), 0.3, (-9.0, -1.5)),
+                    ((-9.0, -1.5), 0.3, (-9.0, -1.0)),
+                    ((-9.0, -1.0), 0.4, (-9.0, 0.0)),
+                    ((-9.0, 0.0), 0.3, (-9.0, 3.0)),
+                    ((-9.0, 3.0), 0.3, (-8.0, 3.0)),
+                    ((-8.0, 3.0), 0.3, (-7.0, 1.5)),
+                    ((-7.0, 1.5), 0.3, (-6.5, 1.5)),
                 ]
             },
             {
                 "area_number": 6,
                 "waypoints": [
-                    ((-6.0, 1.5), 0.5, (-3.5, 2.5)),
-                    ((-3.5, 2.5), 0.5, (-5.0, 3.0)),
-                    ((-5.0, 3.0), 0.5, (-3.0, 3.5)),
-                    ((-3.0, 3.5), 0.5, (-2.0, 3.5)),
+                    ((-6.5, 1.5), 0.3, (-6.0, 1.5)),
+                    ((-6.0, 1.5), 0.3, (-5.0, 3.0)),
+                    ((-5.0, 3.0), 0.3, (-2.0, 3.5)),
                 ]
             },
             {
                 "area_number": 7,
                 "waypoints": [
-                    ((-2.0, 3.5), 0.5, (-0.5, 3.0)),
-                    ((-0.5, 3.0), 0.5, (0.0, -2.0)),
+                    ((-2.0, 3.5), 0.3, (-0.3, 3.0)),
+                    ((-0.3, 3.0), 0.1, (0.0, -2.0)),
                 ]
             }
         ]
@@ -113,22 +114,33 @@ class TrajectoryTFPublisher(Node):
         self.paused = False
         self.pause_until = 0.0
 
+        self.timer_group = MutuallyExclusiveCallbackGroup()
+        self.service_group = MutuallyExclusiveCallbackGroup()
+
         self.srv = self.create_service(
             SetBool,
             "pause_tf",
-            self.pause_callback
+            self.pause_callback,
+            callback_group=self.service_group
         )
 
-        for area in self.areas:
-            for segment in area["waypoints"]:
-                self.segments.append(segment)
+        if self.start_area == 1:
+            for area in self.areas:
+                for segment in area["waypoints"]:
+                    self.segments.append(segment)
+        else:
+            for area in self.areas:
+                if area["area_number"] >= (self.start_area):
+                    for segment in area["waypoints"]:
+                        self.segments.append(segment)
 
         self.segment_idx = 0
         self.progress = 0.0
 
         self.timer = self.create_timer(
             self.timer_dt,
-            self.publish_tf
+            self.publish_tf,
+            callback_group=self.timer_group
         )
     
     def pause_callback(self, request, response):
@@ -209,13 +221,27 @@ class TrajectoryTFPublisher(Node):
         self.br.sendTransform(tf_msg)
 
 
-def main():
-    rclpy.init()
-    node = TrajectoryTFPublisher()
-    rclpy.spin(node)
-    node.destroy_node()
-    rclpy.shutdown()
+def main(args=None):
+    rclpy.init(args=args)
+    start_area = 1
+    if len(sys.argv) > 1:
+        try:
+            start_area = int(sys.argv[1])
+        except ValueError:
+            print("Usage: python3 tf_publisher.py <start_area>")
+            return
 
+
+    node = TrajectoryTFPublisher(start_area=start_area)
+
+    executor = MultiThreadedExecutor(num_threads=2)
+    executor.add_node(node)
+
+    try:
+        executor.spin()
+    finally:
+        node.destroy_node()
+        rclpy.shutdown()
 
 if __name__ == "__main__":
     main()

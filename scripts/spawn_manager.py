@@ -7,6 +7,8 @@ from rclpy.node import Node
 from geometry_msgs.msg import Pose, Twist
 from gazebo_msgs.msg import ModelStates, EntityState
 from gazebo_msgs.srv import SetEntityState, SpawnEntity, DeleteEntity
+from rclpy.executors import MultiThreadedExecutor
+from rclpy.callback_groups import MutuallyExclusiveCallbackGroup
 
 
 class SpawnAreaManager(Node):
@@ -65,127 +67,10 @@ class SpawnAreaManager(Node):
       {
         "name": "area_2",
         "number": 2,
-        "x": -0.46,
+        "x": 0.0,
         "y": 2.0,
         "spawned": False,
         "objects": [
-          {
-            "name": "floating_obstacle_1",
-            "type": "floating",
-            "size": (0.3, 0.3, 0.6),
-            "position": (-1.0, -3.0, 1.0),
-            "gravity": True,
-            "static": False,
-            "waypoints": [
-              [-1.0, -3.0, 1.0],
-              [-1.0, -1.0, 1.0]
-            ],
-            "speed": 0.5
-          },
-          {
-            "name": "floating_obstacle_2",
-            "type": "floating",
-            "size": (0.3, 0.3, 0.6),
-            "position": (-4.0, -2.0, 0.7),
-            "gravity": True,
-            "static": False,
-            "waypoints": [
-              [-4.0, -2.0, 0.7],
-              [-2.0, -1.0, 0.7]
-            ],
-            "speed": 0.5
-          }
-        ]
-      },
-      {
-        "name": "area_3",
-        "number": 3,
-        "x": -3.0,
-        "y": -0.0, 
-        "spawned": False,
-        "objects": [
-          {
-            "name": "dining_table_leg_1",
-            "static": True,
-            "type": "box",
-            "size": (0.1, 0.05, 0.76),
-            "position": (1.05, -1.9125, 0.2),
-            "gravity": True
-          },
-          {
-            "name": "dining_table_leg_2",
-            "static": True,
-            "type": "box",
-            "size": (0.1, 0.05, 0.76),
-            "position": (2.45, -1.9125, 0.2),
-            "gravity": True
-          },
-          {
-            "name": "dining_table_leg_3",
-            "static": True,
-            "type": "box",
-            "size": (0.1, 0.05, 0.76),
-            "position": (2.45, -2.5875, 0.2),
-            "gravity": True
-          },
-          {
-            "name": "dining_table_leg_4",
-            "static": True,
-            "type": "box",
-            "size": (0.1, 0.05, 0.76),
-            "position": (1.05, -2.5875, 0.2),
-            "gravity": True
-          },
-          {
-            "name": "dining_table_plate",
-            "static": True,
-            "type": "box",
-            "size": (1.5, 1.0, 0.025),
-            "position": (1.75, -2.27, 0.781),
-            "gravity": True
-          },
-          {
-            "name": "tight_opening_1",
-            "static": True,
-            "type": "box",
-            "size": (0.3, 1.0, 1.0),
-            "position": (0.424, -5.03, 0.49),
-            "gravity": True
-          },
-          {
-            "name": "tight_opening_2",
-            "static": True,
-            "type": "box",
-            "size": (0.3, 1.0, 1.0),
-            "position": (1.57, -5.03, 0.49),
-            "gravity": True
-          }
-        ]
-      },
-      {
-        "name": "area_4",
-        "number": 4,
-        "x": 0.0,
-        "y": -2.0, 
-        "spawned": False,
-        "objects": [
-          {
-            "name": "barrier",
-            "static": True,
-            "type": "box",
-            "size": (2.79, 0.1, 0.1),
-            "position": (-0.92, -5.94, 0.61),
-            "gravity": False
-          }
-        ]
-      },
-      {
-        "name": "area_5",
-        "number": 5,
-        "x": 1.0,
-        "y": -4.6, 
-        "spawned": False,
-        "objects": [  
           {
             "name": "small_box_1",
             "static": True,
@@ -269,10 +154,154 @@ class SpawnAreaManager(Node):
         ]
       },
       {
+        "name": "area_3",
+        "number": 3,
+        "x": -3.0,
+        "y": -0.0, 
+        "spawned": False,
+        "objects": [
+          {
+            "name": "dining_table_leg_1",
+            "static": True,
+            "type": "box",
+            "size": (0.1, 0.05, 0.76),
+            "position": (1.05, -1.9125, 0.2),
+            "gravity": True
+          },
+          {
+            "name": "dining_table_leg_2",
+            "static": True,
+            "type": "box",
+            "size": (0.1, 0.05, 0.76),
+            "position": (2.45, -1.9125, 0.2),
+            "gravity": True
+          },
+          {
+            "name": "dining_table_leg_3",
+            "static": True,
+            "type": "box",
+            "size": (0.1, 0.05, 0.76),
+            "position": (2.45, -2.5875, 0.2),
+            "gravity": True
+          },
+          {
+            "name": "dining_table_leg_4",
+            "static": True,
+            "type": "box",
+            "size": (0.1, 0.05, 0.76),
+            "position": (1.05, -2.5875, 0.2),
+            "gravity": True
+          },
+          {
+            "name": "dining_table_plate",
+            "static": True,
+            "type": "box",
+            "size": (1.5, 1.0, 0.025),
+            "position": (1.75, -2.27, 0.781),
+            "gravity": True
+          }
+        ]
+      },
+      {
+        "name": "area_4",
+        "number": 4,
+        "x": 0.0,
+        "y": -2.0, 
+        "spawned": False,
+        "objects": [
+          {
+            "name": "tight_opening_1",
+            "static": True,
+            "type": "box",
+            "size": (0.3, 1.926, 1.0),
+            "position": (0.423, -5.52, 0.49),
+            "gravity": True
+          },
+          {
+            "name": "tight_opening_2",
+            "static": True,
+            "type": "box",
+            "size": (0.3, 1.0, 1.0),
+            "position": (1.57, -5.03, 0.49),
+            "gravity": True
+          },
+          {
+            "name": "barrier",
+            "static": True,
+            "type": "box",
+            "size": (2.01, 0.1, 0.1),
+            "position": (-0.92, -5.94, 0.61),
+            "gravity": False
+          },
+          {
+            "name": "help_localization_small_1",
+            "static": True,
+            "type": "cylinder",
+            "position": (1.4457, -7.9385, 0.415),
+            "gravity": True,
+            "radius": 0.24,
+            "length": 0.83
+          },
+          {
+            "name": "help_localization_1",
+            "static": True,
+            "type": "cylinder",
+            "position": (-4.6664, -6.4318, 0.49999),
+            "gravity": True,
+            "radius": 0.39,
+            "length": 1.00
+          },
+          {
+            "name": "help_localization_2",
+            "static": True,
+            "type": "cylinder",
+            "position": (2.36, -7.8227, 0.49999),
+            "gravity": True,
+            "radius": 0.39,
+            "length": 1.00
+          }
+        ]
+      },
+      {
+        "name": "area_5",
+        "number": 5,
+        "x": 1.0,
+        "y": -4.6, 
+        "spawned": False,
+        "objects": [  
+          {
+            "name": "floating_obstacle_1",
+            "type": "floating",
+            "size": (0.3, 0.3, 1.5),
+            "position": (-2.5, -3.5, 0.5),
+            "gravity": True,
+            "static": False,
+            "waypoints": [
+              [-2.5, -3.5, 0.5],
+              [-1.0, -1.0, 0.5]
+            ],
+            "speed": 0.1
+          },
+          {
+            "name": "floating_obstacle_2",
+            "type": "floating",
+            "size": (0.3, 0.3, 1.3),
+            "position": (-4.0, -2.0, 0.4),
+            "gravity": True,
+            "static": False,
+            "waypoints": [
+              [-4.0, -2.0, 0.4],
+              [-2.0, -1.0, 0.4]
+            ],
+            "speed": 0.1
+          }
+        ]
+      },
+      {
         "name": "area_6",
         "number": 6,
         "x": -1.5,
-        "y": -4.7, 
+        "y": -4.8, 
         "spawned": False,
         "objects": []
       },
@@ -300,18 +329,22 @@ class SpawnAreaManager(Node):
       }
     ]
 
+    self.motion_group = MutuallyExclusiveCallbackGroup()
+    self.spawn_group = MutuallyExclusiveCallbackGroup()
+
     self.floating_obstacles = []
     self.model_state_sub = self.create_subscription(
       ModelStates,
       "/gazebo/model_states",
       self.model_states_callback,
-      10
+      10,
+      callback_group=self.motion_group
     )
 
     self.state_client = self.create_client(SetEntityState, "/gazebo/set_entity_state")
     self.delete_cli = self.create_client(DeleteEntity, '/delete_entity')
-    self.motion_timer = self.create_timer(0.05, self.update_floating_obstacles)
-    self.timer = self.create_timer(0.5, self.check_spawn_areas)
+    self.motion_timer = self.create_timer(0.05, self.update_floating_obstacles, callback_group=self.motion_group)
+    self.timer = self.create_timer(0.5, self.check_spawn_areas, callback_group=self.spawn_group)
 
   def model_states_callback(self, msg):
     try:
@@ -576,9 +609,13 @@ def main(args=None):
       return
 
   node = SpawnAreaManager(start_area=start_area)
-  rclpy.spin(node)
-  node.destroy_node()
-  rclpy.shutdown()
+  executor = MultiThreadedExecutor(num_threads=4)
+  executor.add_node(node)
+  try:
+      executor.spin()
+  finally:
+      node.destroy_node()
+      rclpy.shutdown()
 
 if __name__ == "__main__":
   main()

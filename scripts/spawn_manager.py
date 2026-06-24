@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 
-import math, random
+"""
+Start script: python3 spawn_manager.py
+Example for start on area 3: python3 spawn_manager.py 3
+"""
+
+import math, random, time
 import sys
 import rclpy
 from rclpy.node import Node
@@ -12,7 +17,7 @@ from rclpy.callback_groups import MutuallyExclusiveCallbackGroup
 
 
 class SpawnAreaManager(Node):
-  def __init__(self, start_area=1):
+  def __init__(self, start_area:int=1, single_area:bool=False):
     super().__init__('spawn_area_manager')
 
     self.spawn_client = self.create_client(SpawnEntity, '/spawn_entity')
@@ -24,6 +29,7 @@ class SpawnAreaManager(Node):
 
     self.spawn_tolerance = 0.3
     self.current_spawn_area = start_area
+    self.single_area = single_area
     self.spawned_objects = {1:[],2:[],3:[],4:[],5:[],6:[],7:[],8:[]}
 
     # Areas, die Spawn-Events auslösen
@@ -31,8 +37,14 @@ class SpawnAreaManager(Node):
       {
         "name": "area_1",
         "number": 1,
-        "x": 1.0,
-        "y": 2.0,
+        "single": {
+          "x": 1.0,
+          "y": 2.0
+        },
+        "whole": {
+          "x": 1.0,
+          "y": 2.0
+        },
         "spawned": False,
         "objects": [
           {
@@ -67,15 +79,21 @@ class SpawnAreaManager(Node):
       {
         "name": "area_2",
         "number": 2,
-        "x": 0.0,
-        "y": 2.0,
+        "single": {
+          "x": -3.0,
+          "y": 1.0
+        },
+        "whole": {
+          "x": 0.0,
+          "y": 2.0
+        },
         "spawned": False,
         "objects": [
           {
             "name": "small_box_1",
             "static": True,
             "type": "box",
-            "size": (0.12, 0.12, 0.09),
+            "size": (0.20, 0.20, 0.09),
             "position": (-1.05, -2.49, 0.2),
             "gravity": True
           },
@@ -83,7 +101,7 @@ class SpawnAreaManager(Node):
             "name": "small_box_2",
             "static": True,
             "type": "box",
-            "size": (0.12, 0.12, 0.09),
+            "size": (0.20, 0.20, 0.09),
             "position": (-1.25, -2.08, 0.2),
             "gravity": True
           },
@@ -91,7 +109,7 @@ class SpawnAreaManager(Node):
             "name": "small_box_3",
             "static": True,
             "type": "box",
-            "size": (0.12, 0.12, 0.09),
+            "size": (0.20, 0.20, 0.09),
             "position": (-1.61, -2.22, 0.2),
             "gravity": True
           },
@@ -99,7 +117,7 @@ class SpawnAreaManager(Node):
             "name": "small_box_4",
             "static": True,
             "type": "box",
-            "size": (0.12, 0.12, 0.09),
+            "size": (0.20, 0.20, 0.09),
             "position": (-2.55, -3.59, 0.2),
             "gravity": True
           },
@@ -107,7 +125,7 @@ class SpawnAreaManager(Node):
             "name": "small_box_5",
             "static": True,
             "type": "box",
-            "size": (0.12, 0.12, 0.09),
+            "size": (0.20, 0.20, 0.09),
             "position": (-3.4, -2.32, 0.2),
             "gravity": True
           },
@@ -115,7 +133,7 @@ class SpawnAreaManager(Node):
             "name": "small_box_6",
             "static": True,
             "type": "box",
-            "size": (0.12, 0.12, 0.09),
+            "size": (0.20, 0.20, 0.09),
             "position": (-3.26, -1.81, 0.2),
             "gravity": True
           },
@@ -123,7 +141,7 @@ class SpawnAreaManager(Node):
             "name": "small_box_7",
             "static": True,
             "type": "box",
-            "size": (0.12, 0.12, 0.09),
+            "size": (0.20, 0.20, 0.09),
             "position": (-3.08, -1.61, 0.2),
             "gravity": True
           },
@@ -131,7 +149,7 @@ class SpawnAreaManager(Node):
             "name": "small_box_8",
             "static": True,
             "type": "box",
-            "size": (0.12, 0.12, 0.09),
+            "size": (0.20, 0.20, 0.09),
             "position": (-2.81, -1.43, 0.2),
             "gravity": True
           },
@@ -139,7 +157,7 @@ class SpawnAreaManager(Node):
             "name": "small_box_9",
             "static": True,
             "type": "box",
-            "size": (0.12, 0.12, 0.09),
+            "size": (0.20, 0.20, 0.09),
             "position": (-2.81, -1.13, 0.2),
             "gravity": True
           },
@@ -150,16 +168,7 @@ class SpawnAreaManager(Node):
             "size": (0.31, 1.0, 0.477),
             "position": (-2.46, -0.48, 0.2),
             "gravity": True
-          }
-        ]
-      },
-      {
-        "name": "area_3",
-        "number": 3,
-        "x": -3.0,
-        "y": -0.0, 
-        "spawned": False,
-        "objects": [
+          },
           {
             "name": "dining_table_leg_1",
             "static": True,
@@ -203,10 +212,16 @@ class SpawnAreaManager(Node):
         ]
       },
       {
-        "name": "area_4",
-        "number": 4,
-        "x": 0.0,
-        "y": -2.0, 
+        "name": "area_3",
+        "number": 3,
+        "single": {
+          "x": 1.0,
+          "y": -4.0
+        },
+        "whole": {
+          "x": 0.0,
+          "y": -2.0
+        },
         "spawned": False,
         "objects": [
           {
@@ -263,53 +278,57 @@ class SpawnAreaManager(Node):
         ]
       },
       {
-        "name": "area_5",
-        "number": 5,
-        "x": 1.0,
-        "y": -4.6, 
+        "name": "area_4",
+        "number": 4,
+        "single": {
+          "x": -1.5,
+          "y": -5.0
+        },
+        "whole": {
+          "x": 1.0,
+          "y": -4.6
+        },
         "spawned": False,
         "objects": [  
           {
             "name": "floating_obstacle_1",
             "type": "floating",
-            "size": (0.3, 0.3, 1.5),
-            "position": (-2.5, -3.5, 0.5),
+            "size": (0.3, 0.3, 1.0),
+            "position": (-2.5, -3.5, 0.7),
             "gravity": True,
             "static": False,
             "waypoints": [
-              [-2.5, -3.5, 0.5],
-              [-1.0, -1.0, 0.5]
+              [-2.5, -3.5, 0.7],
+              [-1.0, -1.0, 0.7]
             ],
             "speed": 0.1
           },
           {
             "name": "floating_obstacle_2",
             "type": "floating",
-            "size": (0.3, 0.3, 1.3),
-            "position": (-4.0, -2.0, 0.4),
+            "size": (0.3, 0.3, 1.0),
+            "position": (-4.0, -2.0, 0.7),
             "gravity": True,
             "static": False,
             "waypoints": [
-              [-4.0, -2.0, 0.4],
-              [-2.0, -1.0, 0.4]
+              [-4.0, -2.0, 0.7],
+              [-2.0, -1.0, 0.7]
             ],
             "speed": 0.1
           }
         ]
       },
       {
-        "name": "area_6",
-        "number": 6,
-        "x": -1.5,
-        "y": -4.8, 
-        "spawned": False,
-        "objects": []
-      },
-      {
-        "name": "area_7",
-        "number": 7,
-        "x": -0.8,
-        "y": 2.0, 
+        "name": "area_5",
+        "number": 5,
+        "single": {
+          "x": -1.2,
+          "y": 2.0, 
+        },
+        "whole": {
+          "x": -1.2,
+          "y": 2.0, 
+        },
         "spawned": False,
         "objects": [
           {
@@ -409,11 +428,17 @@ class SpawnAreaManager(Node):
     for area in self.spawn_areas:
       if area["spawned"]:
         continue
-
-      distance = math.sqrt(
-        (self.robot_x - area["x"])**2 +
-        (self.robot_y - area["y"])**2
-      )
+      
+      if self.single_area:
+        distance = math.sqrt(
+          (self.robot_x - area["single"]["x"])**2 +
+          (self.robot_y - area["single"]["y"])**2
+        )
+      else:
+        distance = math.sqrt(
+          (self.robot_x - area["whole"]["x"])**2 +
+          (self.robot_y - area["whole"]["y"])**2
+        )
 
       if distance <= self.spawn_tolerance and area["number"] == self.current_spawn_area:
         self.get_logger().info(f"Entered spawn area {area['name']}")
@@ -423,7 +448,7 @@ class SpawnAreaManager(Node):
             self.spawn_cylinder(obj)
           else:
             self.spawn_box(obj)
-          
+          time.sleep(0.1)
           if obj.get("type") == "floating":
             self.floating_obstacles.append({
               "name": obj["name"],
@@ -434,6 +459,7 @@ class SpawnAreaManager(Node):
             })
           
           self.spawned_objects[self.current_spawn_area].append(obj.get("name"))
+          time.sleep(0.1)
         area["spawned"] = True
 
         if self.current_spawn_area - 3 >= 1:
@@ -443,6 +469,7 @@ class SpawnAreaManager(Node):
         self.current_spawn_area += 1
 
   def spawn_box(self, obj):
+    self.get_logger().info(f"spawn Obj: {obj['name']}")
     gravity_str = "true" if obj["gravity"] else "false"
     static_obj = "<static>true</static>" if obj["static"] else ""
     px, py, pz = obj["position"]
@@ -470,6 +497,7 @@ class SpawnAreaManager(Node):
     future.add_done_callback(self.spawn_callback)
     
   def spawn_cylinder(self, obj):
+    self.get_logger().info(f"spawn Obj: {obj['name']}")
     gravity_str = "true" if obj["gravity"] else "false"
     static_obj = "<static>true</static>" if obj["static"] else ""
     px, py, pz = obj["position"]
@@ -601,14 +629,18 @@ class SpawnAreaManager(Node):
 def main(args=None):
   rclpy.init(args=args)
   start_area = 1
+  single_area = False
   if len(sys.argv) > 1:
     try:
       start_area = int(sys.argv[1])
+      single_area = True
     except ValueError:
       print("Usage: python3 spawn_manager.py <start_area>")
-      return
+      print("Switch to default start area = 1")
+      start_area = 1
+      single_area = False
 
-  node = SpawnAreaManager(start_area=start_area)
+  node = SpawnAreaManager(start_area=start_area, single_area=single_area)
   executor = MultiThreadedExecutor(num_threads=4)
   executor.add_node(node)
   try:

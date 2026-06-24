@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 
 """
-Trigger for waiting (3sec.):
-ros2 service call /pause_tf std_srvs/srv/SetBool "{data: true}"
+Start Script: python3 tf_publisher.py
+Example for start script for area 3: 'python3 tf_publisher.py 3'
+
+Start break: ros2 service call /pause_tf std_srvs/srv/SetBool "{data: true}"
+End break: ros2 service call /pause_tf std_srvs/srv/SetBool "{data: false}"
 """
 import math
 import rclpy
@@ -41,70 +44,54 @@ class TrajectoryTFPublisher(Node):
             {
                 "area_number": 1,
                 "waypoints": [
-                    ((0.0, 0.0), 0.3, (-0.2, 2.0)),
+                    ((0.0, 0.8), 0.3, (-0.2, 2.0)),
+                    ((-0.2, 2.0), 0.2, (1.0, 4.0)),
+                    ((1.0, 4.0), 0.2, (-1.0, 5.0)),
+                    ((-1.0, 5.0), 0.2, (-2.0, 4.0)),
+                    ((-2.0, 4.0), 0.2, (-3.0, 3.5)),
                 ]
             },
             {
                 "area_number": 2,
                 "waypoints": [
-                    ((-0.2, 2.0), 0.3, (1.0, 2.5)),
-                    ((1.0, 2.5), 0.3, (1.0, 3.0)),
-                    ((1.0, 3.0), 0.2, (1.0, 4.0)),
-                    ((1.0, 4.0), 0.2, (0.0, 5.0)),
-                    ((0.0, 5.0), 0.2, (-1.0, 5.0)),
-                    ((-1.0, 5.0), 0.3, (-2.0, 4.0)),
-                    ((-2.0, 4.0), 0.3, (-2.5, 3.5)),
-                    ((-2.5, 3.5), 0.3, (-3.0, 3.5)),
+                    ((-3.0, 3.5), 0.2, (-6.0, 3.0)),
+                    ((-6.0, 3.0), 0.2, (-3.5, 2.5)),
+                    ((-3.5, 2.5), 0.2, (-4.0, 1.0)),
+                    ((-4.0, 1.0), 0.2, (-4.0, 0.0)),
+                    ((-4.0, 0.0), 0.2, (-3.0, -1.5)),
+                    ((-3.0, -1.5), 0.2, (-3.5, -2.5)),
+                    ((-3.5, -2.5), 0.2, (-4.5, -2.5)),
+                    ((-4.5, -2.5), 0.2, (-6.0, -1.0)),
+                    ((-6.0, -1.0), 0.2, (-6.6, -1.2)),
                 ]
             },
             {
                 "area_number": 3,
                 "waypoints": [
-                    ((-3.0, 3.5), 0.2, (-6.0, 3.0)),
-                    ((-6.0, 3.0), 0.2, (-3.5, 2.5)),
-                    ((-3.5, 2.5), 0.2, (-4.0, 1.0)),
-                    ((-4.0, 1.0), 0.2, (-4.0, 0.0)),
+                    ((-6.6, -1.2), 0.2, (-7.0, -1.2)),
+                    ((-7.0, -1.2), 0.2, (-8.0, -1.4)),
+                    ((-8.0, -1.4), 0.2, (-8.5, -1.5)),
+                    ((-8.5, -1.5), 0.01, (-8.5, -1.4)),
+                    ((-8.5, -1.4), 0.2, (-9.2, 1.5)),
+                    ((-9.2, 1.5), 0.2, (-8.0, 1.5)),
+                    ((-8.0, 1.5), 0.1, (-7.0, 1.4)),
+                    ((-7.0, 1.4), 0.01, (-7.0, 1.5)),
+                    ((-7.0, 1.5), 0.1, (-6.5, 1.4)),
                 ]
             },
             {
                 "area_number": 4,
                 "waypoints": [
-                    ((-4.0, 0.0), 0.2, (-3.0, 0.0)),
-                    ((-3.0, 0.0), 0.2, (-3.0, -1.0)),
-                    ((-3.0, -1.0), 0.2, (-3.0, -2.0)),
-                    ((-3.0, -2.0), 0.2, (-3.5, -2.5)),
-                    ((-3.5, -2.5), 0.2, (-4.0, -2.5)),
-                    ((-4.0, -2.5), 0.2, (-5.5, -2.5)),
-                    ((-5.5, -2.5), 0.2, (-6.0, -1.0)),
+                    ((-6.5, 1.4), 0.3, (-6.0, 1.5)),
+                    ((-6.0, 1.5), 0.3, (-5.0, 3.0)),
+                    ((-5.0, 3.0), 0.3, (-2.0, 3.5)),
+                    ((-2.0, 3.5), 0.2, (-1.5, 3.7)),
                 ]
             },
             {
                 "area_number": 5,
                 "waypoints": [
-                    ((-6.0, -1.0), 0.2, (-7.0, -1.2)),
-                    ((-7.0, -1.2), 0.2, (-8.0, -1.4)),
-                    ((-8.0, -1.4), 0.3, (-8.5, -1.5)),
-                    ((-8.5, -1.5), 0.3, (-9.0, -1.5)),
-                    ((-9.0, -1.5), 0.3, (-9.0, -1.0)),
-                    ((-9.0, -1.0), 0.4, (-9.0, 0.0)),
-                    ((-9.0, 0.0), 0.3, (-9.0, 3.0)),
-                    ((-9.0, 3.0), 0.3, (-8.0, 3.0)),
-                    ((-8.0, 3.0), 0.3, (-7.0, 1.5)),
-                    ((-7.0, 1.5), 0.3, (-6.5, 1.5)),
-                ]
-            },
-            {
-                "area_number": 6,
-                "waypoints": [
-                    ((-6.5, 1.5), 0.3, (-6.0, 1.5)),
-                    ((-6.0, 1.5), 0.3, (-5.0, 3.0)),
-                    ((-5.0, 3.0), 0.3, (-2.0, 3.5)),
-                ]
-            },
-            {
-                "area_number": 7,
-                "waypoints": [
-                    ((-2.0, 3.5), 0.3, (-0.3, 3.0)),
+                    ((-1.5, 3.7), 0.2, (-0.3, 3.0)),
                     ((-0.3, 3.0), 0.1, (0.0, -2.0)),
                 ]
             }
@@ -112,7 +99,9 @@ class TrajectoryTFPublisher(Node):
 
         self.segments = []
         self.paused = False
-        self.pause_until = 0.0
+        self.current_x = 0.0
+        self.current_y = 0.0
+        self.current_yaw = 0.0
 
         self.timer_group = MutuallyExclusiveCallbackGroup()
         self.service_group = MutuallyExclusiveCallbackGroup()
@@ -144,33 +133,22 @@ class TrajectoryTFPublisher(Node):
         )
     
     def pause_callback(self, request, response):
-        if request.data:
-            self.paused = True
-            self.pause_until = time.time() + 3.0
-            response.success = True
-            response.message = "Paused for 3 seconds"
-        else:
-            self.paused = False
-            response.success = True
-            response.message = "Resumed"
+        self.paused = request.data
+        response.success = True
+        response.message = "Paused" if self.paused else "Resumed"
+        self.get_logger().info(f"{response.message}")
         return response
 
     def publish_tf(self):
+        paused_now = False
         if self.paused:
-            if time.time() < self.pause_until:
-                self.get_logger().info(f"still waiting ({time.time() - self.pause_until})s")
-                return
-            else:
-                self.paused = False
+            paused_now = True
 
         if self.segment_idx >= len(self.segments):
             return
 
         start, speed, goal = self.segments[self.segment_idx]
-        self.get_logger().info(
-            f"Segment {self.segment_idx}: "
-            f"Goal={goal}, Speed={speed:.2f} m/s"
-        )
+        # self.get_logger().info(f"Segment {self.segment_idx}: Goal={goal}, Speed={speed:.2f} m/s")
 
         dx = goal[0] - start[0]
         dy = goal[1] - start[1]
@@ -183,24 +161,33 @@ class TrajectoryTFPublisher(Node):
             return
 
         travel_time = distance / speed
+        if not paused_now:
+            self.progress += self.timer_dt / travel_time
 
-        self.progress += self.timer_dt / travel_time
+            if self.progress >= 1.0:
+                self.segment_idx += 1
+                self.progress = 0.0
 
-        if self.progress >= 1.0:
-            self.segment_idx += 1
-            self.progress = 0.0
-
-            if self.segment_idx >= len(self.segments):
-                x = goal[0]
-                y = goal[1]
+                if self.segment_idx >= len(self.segments):
+                    x = goal[0]
+                    y = goal[1]
+                else:
+                    x = goal[0]
+                    y = goal[1]
             else:
-                x = goal[0]
-                y = goal[1]
-        else:
-            x = start[0] + dx * self.progress
-            y = start[1] + dy * self.progress
+                x = start[0] + dx * self.progress
+                y = start[1] + dy * self.progress
 
-        yaw = math.atan2(dy, dx)
+            yaw = math.atan2(dy, dx)
+            self.current_x = x
+            self.current_y = y
+            self.current_yaw = yaw
+        else:
+            # If paused, use last values
+            x = self.current_x
+            y = self.current_y
+            yaw = self.current_yaw
+
         qx, qy, qz, qw = yaw_to_quaternion(yaw)
 
         tf_msg = TransformStamped()
@@ -228,9 +215,9 @@ def main(args=None):
         try:
             start_area = int(sys.argv[1])
         except ValueError:
-            print("Usage: python3 tf_publisher.py <start_area>")
-            return
-
+            print("Usage: 'python3 tf_publisher.py <int start_area>', e.g.: 'python3 tf_publisher.py 3'")
+            print("Switch to default start area = 1")
+            start_area = 1
 
     node = TrajectoryTFPublisher(start_area=start_area)
 

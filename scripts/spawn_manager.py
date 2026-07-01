@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 """
-Start script: python3 spawn_manager.py
-Example for start on area 3: python3 spawn_manager.py 3
+Start script: python3 spawn_manager.py --ros-args -p use_sim_time:=true 
+Example for start on area 3: python3 spawn_manager.py 3 --ros-args -p use_sim_time:=true 
 """
 
 import math, random, time
@@ -295,8 +295,8 @@ class SpawnAreaManager(Node):
             "type": "floating",
             "size": (0.3, 0.3, 1.0),
             "position": (-2.5, -3.5, 0.7),
-            "gravity": True,
-            "static": False,
+            "gravity": False,
+            "static": True,
             "waypoints": [
               [-2.5, -3.5, 0.7],
               [-1.0, -1.0, 0.7]
@@ -308,8 +308,8 @@ class SpawnAreaManager(Node):
             "type": "floating",
             "size": (0.3, 0.3, 1.0),
             "position": (-4.0, -2.0, 0.7),
-            "gravity": True,
-            "static": False,
+            "gravity": False,
+            "static": True,
             "waypoints": [
               [-4.0, -2.0, 0.7],
               [-2.0, -1.0, 0.7]
@@ -336,8 +336,8 @@ class SpawnAreaManager(Node):
             "type": "floating",
             "size": (0.2, 1.0, 1.0),
             "position": (-0.3, 2.0, 0.2),
-            "gravity": True,
-            "static": False,
+            "gravity": False,
+            "static": True,
             "waypoints": [
                 [-0.3, 2.0, 0.2],
                 [-0.3, 4.0, 0.2]
@@ -462,8 +462,8 @@ class SpawnAreaManager(Node):
           time.sleep(0.1)
         area["spawned"] = True
 
-        if self.current_spawn_area - 3 >= 1:
-          delete_key = self.current_spawn_area - 3
+        if self.current_spawn_area - 2 >= 1:
+          delete_key = self.current_spawn_area - 2
           self.delete_objects(self.spawned_objects[delete_key])
 
         self.current_spawn_area += 1
@@ -625,6 +625,8 @@ class SpawnAreaManager(Node):
       self.get_logger().info(f"Sending delete request for '{name}'")
       future = self.delete_cli.call_async(request)
       futures.append((name, future))
+      time.sleep(0.15)
+
 
 def main(args=None):
   rclpy.init(args=args)

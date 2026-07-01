@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 """
-Start Script: python3 tf_publisher.py
-Example for start script for area 3: 'python3 tf_publisher.py 3'
+Start Script: python3 tf_publisher.py --ros-args -p use_sim_time:=true 
+Example for start script for area 3: 'python3 tf_publisher.py 3 --ros-args -p use_sim_time:=true'
 
 Start break: ros2 service call /pause_tf std_srvs/srv/SetBool "{data: true}"
 End break: ros2 service call /pause_tf std_srvs/srv/SetBool "{data: false}"
@@ -54,9 +54,11 @@ class TrajectoryTFPublisher(Node):
             {
                 "area_number": 2,
                 "waypoints": [
-                    ((-3.0, 3.5), 0.2, (-6.0, 3.0)),
-                    ((-6.0, 3.0), 0.2, (-3.5, 2.5)),
-                    ((-3.5, 2.5), 0.2, (-4.0, 1.0)),
+                    ((-3.0, 3.5), 0.2, (-4.0, 3.5)),
+                    ((-4.0, 3.5), 0.2, (-4.0, 2.5)),
+                    ((-4.0, 2.5), 0.2, (-3.5, 2.0)),
+                    ((-3.5, 2.0), 0.01, (-3.6, 1.9)),
+                    ((-3.6, 1.9), 0.2, (-4.0, 1.0)),
                     ((-4.0, 1.0), 0.2, (-4.0, 0.0)),
                     ((-4.0, 0.0), 0.2, (-3.0, -1.5)),
                     ((-3.0, -1.5), 0.2, (-3.5, -2.5)),

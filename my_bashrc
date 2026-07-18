@@ -12,6 +12,7 @@ source /usr/share/gazebo/setup.bash
 
 source ~/tiago_ws/install/setup.bash
 source ~/ros2_ws/install/setup.bash
+source ~/iki_ws/install/setup.bash
 
 export ROS_LOCALHOST_ONLY=0
 export ROS_DOMAIN_ID=3

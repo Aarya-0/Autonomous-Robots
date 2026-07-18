@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-package_name = 'tf_follower'
+package_name = '26ss_ar_final'
 
 setup(
     name=package_name,
@@ -13,17 +13,18 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='dev',
-    maintainer_email='dev@todo.todo',
+    maintainer='root',
+    maintainer_email='root@todo.todo',
     description='TODO: Package description',
     license='TODO: License declaration',
-    tests_require=['pytest'],
+    extras_require={
+        'test': [
+            'pytest',
+        ],
+    },
     entry_points={
         'console_scripts': [
-            'tf_follower_node = tf_follower.tf_follower:main',
-            'tf_follower_node_v2 = tf_follower.tf_follower_v2:main',
-            'tf_follower_node_v2pt2 = tf_follower.tf_follower_v2pt2:main',
-            "tf_follower_task3 = tf_follower.tf_follower_task3:main",
+            "task1 = 26ss_ar_final.task1:main",
         ],
     },
 )

@@ -5,7 +5,8 @@ services:
 
     environment:
       - DISPLAY=${DISPLAY}
-
+      - RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+      - FASTRTPS_DEFAULT_PROFILES_FILE=/root/config/fastdds_shm.xml
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
       - $HOME/.Xauthority:/root/.Xauthority

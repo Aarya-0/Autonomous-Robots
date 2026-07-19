@@ -25,6 +25,7 @@ setup(
             'tf_follower_node_v2pt2 = tf_follower.tf_follower_v2pt2:main',
             "tf_follower_task3 = tf_follower.tf_follower_task3:main",
             "tf_follower_task3v2 = tf_follower.tf_follower_task3v2:main",
+            "costmap_clearer = tf_follower.costmap_clearer:main",
         ],
     },
 )

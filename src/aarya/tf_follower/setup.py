@@ -28,6 +28,7 @@ setup(
             "costmap_clearer = tf_follower.costmap_clearer:main",
             "tf_follower_fullrun = tf_follower.tf_follower_fullrun:main",
             "tf_follower_fullrunv2 = tf_follower.tf_follower_fullrunv2:main",
+            "tf_follower_fullrunv3 = tf_follower.tf_follower_fullrunv3:main",
         ],
     },
 )

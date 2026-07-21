@@ -1,6 +1,7 @@
-# Solves the small obstacle
-# Ptcloud to laserscan conversion is used to solve global cpu
-# Still heavy. Replacing local cost with pttolaser as well in next version
+
+# Based on #9
+# MPPI
+# Too expensive CPU,slow cmdvel
 amcl:
   ros__parameters:
     use_sim_time: true
@@ -20,8 +21,8 @@ amcl:
     laser_min_range: -1.0
     laser_model_type: "likelihood_field"
     max_beams: 60
-    max_particles: 2000
-    min_particles: 500
+    max_particles: 4000
+    min_particles: 800
     odom_frame_id: odom
     pf_err: 0.05
     pf_z: 0.99
@@ -136,7 +137,7 @@ bt_navigator_navigate_to_pose_rclcpp_node:
 controller_server:
   ros__parameters:
     use_sim_time: true
-    controller_frequency: 20.0
+    controller_frequency: 10.0
     min_x_velocity_threshold: 0.001
     min_y_velocity_threshold: 0.5
     min_theta_velocity_threshold: 0.001
@@ -157,59 +158,102 @@ controller_server:
       xy_goal_tolerance: 0.25
       yaw_goal_tolerance: 6.28
       stateful: True
-    # DWB parameters
+    # MPPI parameters (replaces DWB)
     FollowPath:
-      plugin: "dwb_core::DWBLocalPlanner"
-      debug_trajectory_details: True
-      min_vel_x: 0.0
-      min_vel_y: 0.0
-      max_vel_x: 1.00
-      max_vel_y: 0.0
-      max_vel_theta: 1.00
-      min_speed_xy: 0.0
-      max_speed_xy: 1.00
-      min_speed_theta: 0.0
-      acc_lim_x: 2.5
-      acc_lim_y: 0.0
-      acc_lim_theta: 3.2
-      decel_lim_x: -2.5
-      decel_lim_y: 0.0
-      decel_lim_theta: -3.2
-      vx_samples: 20
-      vy_samples: 5
-      vtheta_samples: 20
-      sim_time: 1.7
-      linear_granularity: 0.05
-      angular_granularity: 0.025
+      plugin: "nav2_mppi_controller::MPPIController"
+      time_steps: 30
+      model_dt: 0.05
+      batch_size: 500
+      vx_std: 0.3
+      vy_std: 0.0
+      wz_std: 0.4
+      vx_max: 1.0
+      vx_min: -0.35
+      vy_max: 0.0
+      wz_max: 1.0
+      ax_max: 2.5
+      ax_min: -2.5
+      ay_max: 0.0
+      ay_min: 0.0
+      az_max: 3.2
+      iteration_count: 2
+      prune_distance: 1.7
       transform_tolerance: 0.2
-      xy_goal_tolerance: 0.25
-      trans_stopped_velocity: 0.25
-      short_circuit_trajectory_evaluation: True
-      stateful: True
-      critics: ["Oscillation", "BaseObstacle", "GoalAlign", "PathAlign", "PathDist", "GoalDist"]
-      BaseObstacle.scale: 0.02
-      PathAlign.scale: 32.0
-      PathAlign.forward_point_distance: 0.1
-      GoalAlign.scale: 24.0
-      GoalAlign.forward_point_distance: 0.1
-      PathDist.scale: 32.0
-      GoalDist.scale: 24.0
-      RotateToGoal.scale: 32.0
-      RotateToGoal.slowing_factor: 5.0
-      RotateToGoal.lookahead_time: -1.0
+      temperature: 0.3
+      gamma: 0.015
+      motion_model: "DiffDrive"
+      visualize: false
+      regenerate_noises: false
+      TrajectoryVisualizer:
+        trajectory_step: 5
+        time_step: 3
+      AckermannConstraints:
+        min_turning_r: 0.2
+      critics: ["ConstraintCritic", "CostCritic", "GoalCritic", "GoalAngleCritic", "PathAlignCritic", "PathFollowCritic", "PathAngleCritic", "PreferForwardCritic"]
+      ConstraintCritic:
+        enabled: true
+        cost_power: 1
+        cost_weight: 4.0
+      GoalCritic:
+        enabled: true
+        cost_power: 1
+        cost_weight: 5.0
+        threshold_to_consider: 1.4
+      GoalAngleCritic:
+        enabled: true
+        cost_power: 1
+        cost_weight: 3.0
+        threshold_to_consider: 0.5
+      PreferForwardCritic:
+        enabled: true
+        cost_power: 1
+        cost_weight: 5.0
+        threshold_to_consider: 0.5
+      CostCritic:
+        enabled: true
+        cost_power: 1
+        cost_weight: 3.81
+        critical_cost: 300.0
+        consider_footprint: false
+        collision_cost: 1000000.0
+        near_goal_distance: 1.0
+        trajectory_point_step: 2
+      PathAlignCritic:
+        enabled: true
+        cost_power: 1
+        cost_weight: 20.0
+        max_path_occupancy_ratio: 0.05
+        trajectory_point_step: 4
+        threshold_to_consider: 0.5
+        offset_from_furthest: 10
+        use_path_orientations: false
+      PathFollowCritic:
+        enabled: true
+        cost_power: 1
+        cost_weight: 5.0
+        offset_from_furthest: 5
+        threshold_to_consider: 1.4
+      PathAngleCritic:
+        enabled: true
+        cost_power: 1
+        cost_weight: 2.0
+        offset_from_furthest: 4
+        threshold_to_consider: 0.5
+        max_angle_to_furthest: 1.0
+        mode: 0
 
 global_costmap:
   global_costmap:
     ros__parameters:
-      update_frequency: 0.5
-      publish_frequency: 0.5
+      update_frequency: 1.0
+      publish_frequency: 1.0
       global_frame: map
       robot_base_frame: base_link
       use_sim_time: true
       robot_radius: 0.275
       resolution: 0.05
       track_unknown_space: true
-      plugins: ["static_layer", "obstacle_layer", "inflation_layer","ground_memory_layer"]
+      plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
       obstacle_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
         enabled: True
@@ -224,18 +268,6 @@ global_costmap:
           raytrace_min_range: 0.0
           obstacle_max_range: 2.5
           obstacle_min_range: 0.0
-      ground_memory_layer:
-        plugin: "nav2_costmap_2d::ObstacleLayer"
-        enabled: True
-        observation_sources: ground_scan
-        ground_scan:
-          topic: /head_camera_ground_scan
-          data_type: "LaserScan"
-          marking: True
-          clearing: False
-          obstacle_max_range: 3.0
-          obstacle_min_range: 0.1
-          expected_update_rate: 0.1
       static_layer:
         plugin: "nav2_costmap_2d::StaticLayer"
         map_subscribe_transient_local: True
@@ -418,18 +450,3 @@ waypoint_follower:
       plugin: "nav2_waypoint_follower::WaitAtWaypoint"
       enabled: True
       waypoint_pause_duration: 0
-
-pointcloud_to_laserscan_node:
-  ros__parameters:
-    target_frame: base_link
-    transform_tolerance: 0.1
-    min_height: 0.02
-    max_height: 0.4
-    angle_min: -0.5
-    angle_max: 0.5
-    angle_increment: 0.005
-    scan_time: 0.1
-    range_min: 0.1
-    range_max: 3.0
-    use_inf: true
-    concurrency_level: 1

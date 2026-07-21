@@ -1,6 +1,5 @@
-# Solves the small obstacle
-# Ptcloud to laserscan conversion is used to solve global cpu
-# Still heavy. Replacing local cost with pttolaser as well in next version
+# Changed minmax particles
+# Best candidate as of now.
 amcl:
   ros__parameters:
     use_sim_time: true
@@ -20,8 +19,8 @@ amcl:
     laser_min_range: -1.0
     laser_model_type: "likelihood_field"
     max_beams: 60
-    max_particles: 2000
-    min_particles: 500
+    max_particles: 4000
+    min_particles: 800
     odom_frame_id: odom
     pf_err: 0.05
     pf_z: 0.99
@@ -201,15 +200,15 @@ controller_server:
 global_costmap:
   global_costmap:
     ros__parameters:
-      update_frequency: 0.5
-      publish_frequency: 0.5
+      update_frequency: 1.0
+      publish_frequency: 1.0
       global_frame: map
       robot_base_frame: base_link
       use_sim_time: true
       robot_radius: 0.275
       resolution: 0.05
       track_unknown_space: true
-      plugins: ["static_layer", "obstacle_layer", "inflation_layer","ground_memory_layer"]
+      plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
       obstacle_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
         enabled: True
@@ -224,18 +223,6 @@ global_costmap:
           raytrace_min_range: 0.0
           obstacle_max_range: 2.5
           obstacle_min_range: 0.0
-      ground_memory_layer:
-        plugin: "nav2_costmap_2d::ObstacleLayer"
-        enabled: True
-        observation_sources: ground_scan
-        ground_scan:
-          topic: /head_camera_ground_scan
-          data_type: "LaserScan"
-          marking: True
-          clearing: False
-          obstacle_max_range: 3.0
-          obstacle_min_range: 0.1
-          expected_update_rate: 0.1
       static_layer:
         plugin: "nav2_costmap_2d::StaticLayer"
         map_subscribe_transient_local: True
@@ -418,18 +405,3 @@ waypoint_follower:
       plugin: "nav2_waypoint_follower::WaitAtWaypoint"
       enabled: True
       waypoint_pause_duration: 0
-
-pointcloud_to_laserscan_node:
-  ros__parameters:
-    target_frame: base_link
-    transform_tolerance: 0.1
-    min_height: 0.02
-    max_height: 0.4
-    angle_min: -0.5
-    angle_max: 0.5
-    angle_increment: 0.005
-    scan_time: 0.1
-    range_min: 0.1
-    range_max: 3.0
-    use_inf: true
-    concurrency_level: 1

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-# Works at high freq with clearer to tackle moving obstacles well. 3sec is good
-# Base for copying
+# Used a different launchfile. With pointcloud to lasrescan conversion. This is used to solve the global cpu issue.
+# Hit dead end with high cpu
 import rclpy
 from rclpy.node import Node
 from rclpy.action import ActionClient

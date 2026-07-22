@@ -1,0 +1,128 @@
+# services:
+#   test-service:
+#     container_name: tiago-container
+#     image: fbe-dockerreg.rwu.de/prj-iki-ros2/robots/tiago/tiago_base:sim-ar
+#     environment:
+#       - DISPLAY=$DISPLAY
+#     volumes:
+#       - $IKI_WORKSPACE/my_bash_history:/root/.bash_history
+#       - $IKI_WORKSPACE/26ss_ab-257929_ak-258066_final/my_bashrc_tiago:/root/.bashrc
+#       - /tmp/.X11-unix:/tmp/.X11-unix
+#       - /run/user/1000/gdm/Xauthority:/root/.Xauthority:ro
+#       - /tmp/.X11-unix:/tmp/.X11-unix
+#       - $HOME/.Xauthority:/root/.Xauthority
+#       - $IKI_WORKSPACE/26ss_ab-257929_ak-258066_final/src:/root/iki_ws/src
+#       - $IKI_WORKSPACE/26ss_ab-257929_ak-258066_final/scripts:/root/scripts
+#       - $IKI_WORKSPACE/26ss_ab-257929_ak-258066_final/maps:/root/maps
+#       - $IKI_WORKSPACE/26ss_ab-257929_ak-258066_final/models:/root/models
+#       - $IKI_WORKSPACE/26ss_ab-257929_ak-258066_final/config:/root/config
+#       - $IKI_WORKSPACE/26ss_ab-257929_ak-258066_final/models/sim_ar_ss26.launch.py:/root/tiago_ws/install/rwu_tiago_bringup/share/rwu_tiago_bringup/launch/sim/sim_ar_ss26.launch.py
+#       - $IKI_WORKSPACE/26ss_ab-257929_ak-258066_final/models/ar_ss26:/root/ros2_ws/src/prj-iki-ros2/knowledgebase/iki_object_models/iki_object_models/models/ar_ss26
+
+#     working_dir: /root/ros2_ws
+#     network_mode: host
+#     ipc: host
+#     privileged: true
+#     stdin_open: true
+#     tty: true
+
+#     command:
+#       - bash
+#       - -c
+#       - |
+#         source /opt/ros/humble/setup.bash
+#         export GAZEBO_MODEL_PATH=/root/ros2_ws/src/prj-iki-ros2/knowledgebase/iki_object_models/iki_object_models/models:/root/models
+#         source /ros_entrypoint.sh
+#         source /usr/share/gazebo/setup.bash
+#         # export ROS_LOCALHOST_ONLY=1
+#         # export ROS_DOMAIN_ID=54
+#         tail -f /dev/null
+
+
+# services:
+#   tiago-sim:
+#     container_name: tiago-container
+#     image: fbe-dockerreg.rwu.de/prj-iki-ros2/robots/tiago/tiago_base:sim-ar
+
+#     environment:
+#       - DISPLAY=${DISPLAY}
+
+#     volumes:
+#       - /tmp/.X11-unix:/tmp/.X11-unix
+#       - $HOME/.Xauthority:/root/.Xauthority
+
+#       - ../src:/root/iki_ws/src
+#       - ../scripts:/root/scripts
+#       - ../maps:/root/maps
+#       - ../models:/root/models
+#       - ../config:/root/config
+
+#       - ../my_bash_history:/root/.bash_history
+#       - ../my_bashrc:/root/.bashrc
+
+#       # Launch file override
+#       - ../models/sim_ar_ss26.launch.py:/root/tiago_ws/install/rwu_tiago_bringup/share/rwu_tiago_bringup/launch/sim/sim_ar_ss26.launch.py
+
+#       # Custom model
+#       - ../models/ar_ss26:/root/ros2_ws/src/prj-iki-ros2/knowledgebase/iki_object_models/iki_object_models/models/ar_ss26
+
+#     working_dir: /root
+
+#     network_mode: host
+#     ipc: host
+#     privileged: true
+#     stdin_open: true
+#     tty: true
+
+#     command:
+#       - bash
+#       - -c
+#       - |
+#         source /ros_entrypoint.sh
+#         source /usr/share/gazebo/setup.bash
+#         export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/root/ros2_ws/src/prj-iki-ros2/knowledgebase/iki_object_models/iki_object_models/models/ar_ss26:/root/models
+#         tail -f /dev/null
+services:
+  tiago-sim:
+    container_name: tiago-container
+    image: fbe-dockerreg.rwu.de/prj-iki-ros2/robots/tiago/tiago_base:sim-ar
+
+    environment:
+      - DISPLAY=${DISPLAY}
+      - RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+      - FASTRTPS_DEFAULT_PROFILES_FILE=/root/config/fastdds_shm.xml
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - $HOME/.Xauthority:/root/.Xauthority
+
+      - ../src:/root/iki_ws/src
+      - ../scripts:/root/scripts
+      - ../maps:/root/maps
+      - ../models:/root/models
+      - ../config:/root/config
+
+      - ../my_bash_history:/root/.bash_history
+      - ../my_bashrc:/root/.bashrc
+
+      # Launch file override
+      - ../models/sim_ar_ss26.launch.py:/root/tiago_ws/install/rwu_tiago_bringup/share/rwu_tiago_bringup/launch/sim/sim_ar_ss26.launch.py
+
+      # Custom model
+      - ../models/ar_ss26:/root/ros2_ws/src/prj-iki-ros2/knowledgebase/iki_object_models/iki_object_models/models/ar_ss26
+
+    working_dir: /root
+
+    network_mode: host
+    ipc: host
+    privileged: true
+    stdin_open: true
+    tty: true
+
+    command:
+      - bash
+      - -c
+      - |
+        export GAZEBO_MODEL_PATH=/root/ros2_ws/src/prj-iki-ros2/knowledgebase/iki_object_models/iki_object_models/models:/root/models
+        source /ros_entrypoint.sh
+        source /usr/share/gazebo/setup.bash
+        tail -f /dev/null

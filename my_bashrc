@@ -1,0 +1,25 @@
+export IKI_GIT_LOGO="🤖|"
+PS1="${IKI_GIT_LOGO} \[\033[1;36m\]\h \[\033[1;34m\]\W \[\033[1;36m\]# \[\033[0m\]"
+
+# your workspace
+source ~/iki_ws/install/setup.bash
+
+# your tiago workspace
+source ~/tiago_ws/install/setup.bash
+
+# your ros2 workspace
+source ~/ros2_ws/install/setup.bash
+
+export GAZEBO_MODEL_PATH=/root/ros2_ws/src/prj-iki-ros2/knowledgebase/iki_object_models/iki_object_models/models:/root/models
+
+# ROS2 Humble Setup
+source /ros_entrypoint.sh
+source /opt/ros/humble/setup.bash
+
+# Gazebo Setup
+source /usr/share/gazebo/setup.bash
+
+export ROS_LOCALHOST_ONLY=0
+export ROS_DOMAIN_ID=54
+#export CYCLONEDDS_URI="file:////turtlebot_unicast_configs/unicast-domain-${ROS_DOMAIN_ID}.xml"
+

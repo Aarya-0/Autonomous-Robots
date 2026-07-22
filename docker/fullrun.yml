@@ -58,7 +58,7 @@ services:
           is_public_sim:=True x:=1.0 y:=2.0 yaw:=3.11 \
           navigation:=True slam:=False \
           map_path:=/root/maps/map_ar_ss26.yaml \
-          nav_config:=/root/config/tiago_custom_fullrunv9.yaml &
+          nav_config:=/root/config/tiago_custom_fullrunva1.yaml &
         SIM_PID=$$!
 
         # Give Gazebo/Nav2 time to come up before we push a pose

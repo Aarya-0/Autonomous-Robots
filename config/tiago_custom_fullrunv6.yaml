@@ -4,10 +4,10 @@
 amcl:
   ros__parameters:
     use_sim_time: true
-    alpha1: 0.2
-    alpha2: 0.2
-    alpha3: 0.2
-    alpha4: 0.2
+    alpha1: 0.08
+    alpha2: 0.04
+    alpha3: 0.01
+    alpha4: 0.01
     base_frame_id: base_footprint
     beam_skip_distance: 0.5
     beam_skip_error_threshold: 0.9
@@ -20,8 +20,8 @@ amcl:
     laser_min_range: -1.0
     laser_model_type: "likelihood_field"
     max_beams: 60
-    max_particles: 2000
-    min_particles: 500
+    max_particles: 4000
+    min_particles: 800
     odom_frame_id: odom
     pf_err: 0.05
     pf_z: 0.99
@@ -187,7 +187,7 @@ controller_server:
       short_circuit_trajectory_evaluation: True
       stateful: True
       critics: ["Oscillation", "BaseObstacle", "GoalAlign", "PathAlign", "PathDist", "GoalDist"]
-      BaseObstacle.scale: 0.02
+      BaseObstacle.scale: 2.5
       PathAlign.scale: 32.0
       PathAlign.forward_point_distance: 0.1
       GoalAlign.scale: 24.0
@@ -219,7 +219,7 @@ global_costmap:
           data_type: "PointCloud2"
           marking: True
           clearing: False
-          observation_persistence: 3.0
+          observation_persistence: 0.0
           obstacle_max_range: 2.5
           obstacle_min_range: 0.1
           raytrace_max_range: 3.5
@@ -242,8 +242,8 @@ global_costmap:
         map_subscribe_transient_local: True
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
-        cost_scaling_factor: 3.0
-        inflation_radius: 0.55
+        cost_scaling_factor: 0.5
+        inflation_radius: 1.5
       always_send_full_costmap: True
 
 local_costmap:
@@ -255,8 +255,8 @@ local_costmap:
       robot_base_frame: base_link
       use_sim_time: true
       rolling_window: true
-      width: 3
-      height: 3
+      width: 6
+      height: 6
       resolution: 0.05
       robot_radius: 0.275
       plugins: ["voxel_layer", "inflation_layer"]

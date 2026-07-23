@@ -15,7 +15,8 @@ services:
       - $HOME/.Xauthority:/root/.Xauthority
 
       - ../src:/root/iki_ws/src
-      - /media/ak-258066/858ce5a3-711b-493c-8bfa-d9321086c6b9:/root/scripts
+      - ../scripts:/root/scripts
+      # - /media/ak-258066/858ce5a3-711b-493c-8bfa-d9321086c6b9:/root/scripts
       - ../maps:/root/maps
       - ../models:/root/models
       - ../config:/root/config
@@ -86,11 +87,15 @@ services:
         }"
 
         # Start the fullrun action server
+        # ros2 run tf_follower tf_follower_fullrunv5 &
         ros2 run fullrun fullrun &
         ACTION_PID=$$!
         sleep 3
 
-        # Trigger the action and stream feedback to the container logs
+        ros2 run fullrun tf_pauser &
+        sleep 3
+
+        # # Trigger the action and stream feedback to the container logs
         ros2 action send_goal /fullrun ar_final_interfaces/action/ArFinal "{task: 'start'}" --feedback &
 
         # Start the costmap clearer

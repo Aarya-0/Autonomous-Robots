@@ -35,6 +35,9 @@ setup(
             "tf_follower_fullrunv7 = tf_follower.tf_follower_fullrunv7:main",
             "tf_follower_fullrunv8 = tf_follower.tf_follower_fullrunv8:main",
             "tf_follower_fullrunv9 = tf_follower.tf_follower_fullrunv9:main",
+            "snapshot_node = tf_follower.snapshot_node:main",
+            "tf_follower_fullrunwithsnap = tf_follower.tf_follower_fullrunwithsnap:main",
+            "pose_setter = tf_follower.pose_setter:main",
         ],
     },
 )

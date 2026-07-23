@@ -25,7 +25,8 @@ setup(
     entry_points={
         'console_scripts': [
             "fullrun = fullrun.fullrun:main",
-            "fullrunv2 = fullrun.fullrunv2:main",
+            "fullrunfinal = fullrun.fullrunfinal:main",
+            "fullrunoverkill = fullrun.fullrunoverkill:main",
         ],
     },
 )

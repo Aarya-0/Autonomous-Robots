@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-package_name = 'fullrun'
+package_name = '26ss_ar_final'
 
 setup(
     name=package_name,
@@ -16,7 +16,7 @@ setup(
     maintainer='root',
     maintainer_email='root@todo.todo',
     description='TODO: Package description',
-    license='TODO: License declaration',
+    license='Apache-2.0',
     extras_require={
         'test': [
             'pytest',
@@ -24,12 +24,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            "fullrun = fullrun.fullrun:main",
-            "fullrunfinal = fullrun.fullrunfinal:main",
-            "fullrunoverkill = fullrun.fullrunoverkill:main",
-            "fullrunv2 = fullrun.fullrunv2:main",
-            "fullrunvm = fullrun.fullrunvm:main",
-            "tf_pauser = fullrun.tf_pauser:main",
+            'task2 = 26ss_ar_final.task2:main',
         ],
     },
 )

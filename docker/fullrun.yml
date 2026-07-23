@@ -37,6 +37,7 @@ services:
       - |
         set -e
 
+        rm -rf /dev/shm/fastrtps_* /dev/shm/sem.fastrtps_* 2>/dev/null || true
         # Source ROS/Gazebo setup directly, WITHOUT sourcing iki_ws
         # (that hasn't been built yet on a fresh container)
         export GAZEBO_MODEL_PATH=/root/ros2_ws/src/prj-iki-ros2/knowledgebase/iki_object_models/iki_object_models/models:/root/models
@@ -58,38 +59,22 @@ services:
           is_public_sim:=True x:=1.0 y:=2.0 yaw:=3.11 \
           navigation:=True slam:=False \
           map_path:=/root/maps/map_ar_ss26.yaml \
-          nav_config:=/root/config/tiago_custom_fullrunv9.yaml &
+          nav_config:=/root/config/tiago_custom_fullrunv13.yaml &
         SIM_PID=$$!
 
-        # Give Gazebo/Nav2 time to come up before we push a pose
+        # Give Gazebo/Nav2 time to come up before we start the action server
         sleep 25
 
-        # Set the initial pose
-        ros2 topic pub --once /initialpose geometry_msgs/msg/PoseWithCovarianceStamped "{
-          header: {frame_id: 'map'},
-          pose: {
-            pose: {
-              position: {x: 0.06598091125488281, y: 0.05220019072294235, z: 0.0},
-              orientation: {x: 0.0, y: 0.0, z: 0.7442220277496688, w: 0.6679323119988815}
-            },
-            covariance: [0.25,0.0,0.0,0.0,0.0,0.0,
-                         0.0,0.25,0.0,0.0,0.0,0.0,
-                         0.0,0.0,0.0,0.0,0.0,0.0,
-                         0.0,0.0,0.0,0.0,0.0,0.0,
-                         0.0,0.0,0.0,0.0,0.0,0.0,
-                         0.0,0.0,0.0,0.0,0.0,0.06853891909122467]
-          }
-        }"
-
-        # Start the fullrun action server
+        # Start the fullrunfinal action server (localizes + navigates per
+        # goal's task field — no separate pose push and no goal is sent here)
         ros2 run fullrun fullrun &
         ACTION_PID=$$!
-        sleep 3
-
-        # Trigger the action and stream feedback to the container logs
-        ros2 action send_goal /fullrun ar_final_interfaces/action/ArFinal "{task: 'start'}" --feedback &
 
         # Start the costmap clearer
-        ros2 run tf_follower costmap_clearer --ros-args -p clear_interval_sec:=3.0
+        ros2 run tf_follower costmap_clearer --ros-args -p clear_interval_sec:=3.0 &
+
+        sleep 3
+        ros2 run fullrun tf_pauser &
+        
 
         wait $$SIM_PID $$ACTION_PID

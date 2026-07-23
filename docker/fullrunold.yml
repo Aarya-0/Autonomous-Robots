@@ -61,13 +61,33 @@ services:
           nav_config:=/root/config/tiago_custom_fullrunv9.yaml &
         SIM_PID=$$!
 
-        # Give Gazebo/Nav2 time to come up before we start the action server
+        # Give Gazebo/Nav2 time to come up before we push a pose
         sleep 25
 
-        # Start the fullrunfinal action server (localizes + navigates per
-        # goal's task field — no separate pose push and no goal is sent here)
-        ros2 run fullrun fullrunoverkill &
+        # Set the initial pose
+        ros2 topic pub --once /initialpose geometry_msgs/msg/PoseWithCovarianceStamped "{
+          header: {frame_id: 'map'},
+          pose: {
+            pose: {
+              position: {x: 0.06598091125488281, y: 0.05220019072294235, z: 0.0},
+              orientation: {x: 0.0, y: 0.0, z: 0.7442220277496688, w: 0.6679323119988815}
+            },
+            covariance: [0.25,0.0,0.0,0.0,0.0,0.0,
+                         0.0,0.25,0.0,0.0,0.0,0.0,
+                         0.0,0.0,0.0,0.0,0.0,0.0,
+                         0.0,0.0,0.0,0.0,0.0,0.0,
+                         0.0,0.0,0.0,0.0,0.0,0.0,
+                         0.0,0.0,0.0,0.0,0.0,0.06853891909122467]
+          }
+        }"
+
+        # Start the fullrun action server
+        ros2 run fullrun fullrun &
         ACTION_PID=$$!
+        sleep 3
+
+        # Trigger the action and stream feedback to the container logs
+        ros2 action send_goal /fullrun ar_final_interfaces/action/ArFinal "{task: 'start'}" --feedback &
 
         # Start the costmap clearer
         ros2 run tf_follower costmap_clearer --ros-args -p clear_interval_sec:=3.0

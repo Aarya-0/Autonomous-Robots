@@ -35,6 +35,8 @@ setup(
             "tf_follower_fullrunv7 = tf_follower.tf_follower_fullrunv7:main",
             "tf_follower_fullrunv8 = tf_follower.tf_follower_fullrunv8:main",
             "tf_follower_fullrunv9 = tf_follower.tf_follower_fullrunv9:main",
+            "tf_follower_fullrunv10 = tf_follower.tf_follower_fullrunv10:main",
+
         ],
     },
 )

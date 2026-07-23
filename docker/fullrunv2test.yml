@@ -17,7 +17,7 @@ services:
       - $HOME/.Xauthority:/root/.Xauthority
 
       - ../src:/root/iki_ws/src
-      - ../scripts:/root/scripts
+      - /media/ak-258066/858ce5a3-711b-493c-8bfa-d9321086c6b9:/root/scripts
       - ../maps:/root/maps
       - ../models:/root/models
       - ../config:/root/config

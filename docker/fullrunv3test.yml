@@ -1,4 +1,4 @@
-#Best so far
+
 
 services:
   tiago-sim:
@@ -17,7 +17,7 @@ services:
       - $HOME/.Xauthority:/root/.Xauthority
 
       - ../src:/root/iki_ws/src
-      - ../scripts:/root/scripts
+      - /media/ak-258066/858ce5a3-711b-493c-8bfa-d9321086c6b9:/root/scripts
       - ../maps:/root/maps
       - ../models:/root/models
       - ../config:/root/config
@@ -64,7 +64,7 @@ services:
           is_public_sim:=True x:=1.0 y:=2.0 yaw:=3.11 \
           navigation:=True slam:=False \
           map_path:=/root/maps/map_ar_ss26.yaml \
-          nav_config:=/root/config/tiago_custom_fullrunv10.yaml &
+          nav_config:=/root/config/tiago_custom_fullrunv12.yaml &
         SIM_PID=$$!
 
         # Give Gazebo/Nav2 time to come up before we push a pose
@@ -88,7 +88,7 @@ services:
         }"
 
         # Start the fullrun action server
-        ros2 run fullrun fullrun &
+        ros2 run fullrun fullrunv2 &
         ACTION_PID=$$!
         sleep 3
 
@@ -96,6 +96,6 @@ services:
         ros2 action send_goal /fullrun ar_final_interfaces/action/ArFinal "{task: 'start'}" --feedback &
 
         # Start the costmap clearer
-        ros2 run tf_follower costmap_clearer --ros-args -p clear_interval_sec:=3.0
+        #ros2 run tf_follower costmap_clearer --ros-args -p clear_interval_sec:=3.0
 
         wait $$SIM_PID $$ACTION_PID

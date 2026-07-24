@@ -1,0 +1,4 @@
+ros2 action send_goal /fullrun ar_final_interfaces/action/ArFinal "{task: 'fullrun'}" --feedback
+ros2 action send_goal /fullrun ar_final_interfaces/action/ArFinal "{task: 'fullrun'}" --feedback
+ros2 action send_goal /fullrun ar_final_interfaces/action/ArFinal "{task: 'fullrun'}" --feedback
+ros2 action send_goal /fullrun ar_final_interfaces/action/ArFinal "{task: 'fullrun'}" --feedback

@@ -25,6 +25,8 @@ setup(
     entry_points={
         'console_scripts': [
             "task1 = 26ss_ar_final.task1:main",
+            "fullrun = 26ss_ar_final.fullrun:main",
+            "tf_pauser = 26ss_ar_final.tf_pauser:main",
         ],
     },
 )

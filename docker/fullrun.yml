@@ -72,14 +72,14 @@ services:
 
         # Start the fullrunfinal action server (localizes + navigates per
         # goal's task field — no separate pose push and no goal is sent here)
-        ros2 run fullrun fullrun &
+        ros2 run 26ss_ar_final fullrun &
         ACTION_PID=$$!
 
         # Start the costmap clearer
         ros2 run tf_follower costmap_clearer --ros-args -p clear_interval_sec:=3.0 &
 
         sleep 3
-        ros2 run fullrun tf_pauser &
+        ros2 run 26ss_ar_final tf_pauser &
         
 
         wait $$SIM_PID $$ACTION_PID

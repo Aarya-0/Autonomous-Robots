@@ -11,6 +11,13 @@
   <test_depend>ament_flake8</test_depend>
   <test_depend>ament_pep257</test_depend>
   <test_depend>python3-pytest</test_depend>
+  <depend>rclpy</depend>
+  <depend>tf2_ros</depend>
+  <depend>nav2_msgs</depend>
+  <depend>ar_final_interfaces</depend>
+  <depend>tf_follower</depend>
+  <depend>control_msgs</depend>
+  <depend>trajectory_msgs</depend>
 
   <export>
     <build_type>ament_python</build_type>

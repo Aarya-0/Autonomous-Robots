@@ -4,15 +4,19 @@ services:
     image: fbe-dockerreg.rwu.de/prj-iki-ros2/robots/tiago/tiago_base:sim-ar
 
     environment:
-      - DISPLAY=${DISPLAY}
-      - RMW_IMPLEMENTATION=rmw_fastrtps_cpp
-      - FASTRTPS_DEFAULT_PROFILES_FILE=/root/config/fastdds_shm.xml
+      DISPLAY: ${DISPLAY}
+      RMW_IMPLEMENTATION: rmw_fastrtps_cpp
+      FASTRTPS_DEFAULT_PROFILES_FILE: /root/config/fastdds_shm.xml
+      QT_X11_NO_MITSHM: "1"
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute, video, utility, graphics
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
       - $HOME/.Xauthority:/root/.Xauthority
 
       - ../src:/root/iki_ws/src
       - ../scripts:/root/scripts
+      # - /media/ak-258066/858ce5a3-711b-493c-8bfa-d9321086c6b9:/root/scripts
       - ../maps:/root/maps
       - ../models:/root/models
       - ../config:/root/config
@@ -24,6 +28,7 @@ services:
       - ../models/ar_ss26:/root/ros2_ws/src/prj-iki-ros2/knowledgebase/iki_object_models/iki_object_models/models/ar_ss26
 
     working_dir: /root
+    runtime: nvidia
 
     network_mode: host
     ipc: host

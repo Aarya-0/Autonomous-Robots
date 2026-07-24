@@ -425,118 +425,118 @@ class FullRunActionServer(Node):
 # ============================================================
 # HeadSweepNode (incorporated from second script, unchanged)
 # ============================================================
-class HeadSweepNode(Node):
-    """
-    Periodically tilts the head down to scan the near-field ground
-    blind spot, then returns to neutral. Every few cycles it also
-    pans sideways to widen horizontal coverage (doorways, corners).
+# class HeadSweepNode(Node):
+#     """
+#     Periodically tilts the head down to scan the near-field ground
+#     blind spot, then returns to neutral. Every few cycles it also
+#     pans sideways to widen horizontal coverage (doorways, corners).
 
-    Joint order for TIAGo's head_controller is [head_1_joint (pan),
-    head_2_joint (tilt)]. Pan: + is left, - is right (radians).
-    Tilt: negative looks down, 0.0 is level, positive looks up.
+#     Joint order for TIAGo's head_controller is [head_1_joint (pan),
+#     head_2_joint (tilt)]. Pan: + is left, - is right (radians).
+#     Tilt: negative looks down, 0.0 is level, positive looks up.
 
-    Tuned to match a 3.0s costmap clear / 3.0s observation_persistence:
-    one full dip completes well within that window so a fresh ground
-    observation is always in the buffer when the clear runs.
-    """
+#     Tuned to match a 3.0s costmap clear / 3.0s observation_persistence:
+#     one full dip completes well within that window so a fresh ground
+#     observation is always in the buffer when the clear runs.
+#     """
 
-    NEUTRAL = (0.0, 0.0)
-    TILT_DOWN = (0.0, -0.5)     # look down at near-field ground
-    PAN_LEFT_DOWN = (0.4, -0.4)  # widen coverage to the left
-    PAN_RIGHT_DOWN = (-0.4, -0.4)  # widen coverage to the right
+#     NEUTRAL = (0.0, 0.0)
+#     TILT_DOWN = (0.0, -0.5)     # look down at near-field ground
+#     PAN_LEFT_DOWN = (0.4, -0.4)  # widen coverage to the left
+#     PAN_RIGHT_DOWN = (-0.4, -0.4)  # widen coverage to the right
 
-    def __init__(self):
-        super().__init__('head_sweep_node')
+#     def __init__(self):
+#         super().__init__('head_sweep_node')
 
-        self._action_client = ActionClient(
-            self,
-            FollowJointTrajectory,
-            '/head_controller/follow_joint_trajectory'
-        )
+#         self._action_client = ActionClient(
+#             self,
+#             FollowJointTrajectory,
+#             '/head_controller/follow_joint_trajectory'
+#         )
 
-        self.joint_names = ['head_1_joint', 'head_2_joint']
+#         self.joint_names = ['head_1_joint', 'head_2_joint']
 
-        # One full sweep cycle: down -> neutral -> (occasionally) side pans -> neutral
-        self.sweep_period_sec = 2.5   # < 3.0s clear interval, leaves margin
-        self.segment_duration_sec = 0.8
+#         # One full sweep cycle: down -> neutral -> (occasionally) side pans -> neutral
+#         self.sweep_period_sec = 2.5   # < 3.0s clear interval, leaves margin
+#         self.segment_duration_sec = 0.8
 
-        self.cycle_count = 0
-        self.side_pan_every_n = 3  # do a sideways pan every Nth cycle
+#         self.cycle_count = 0
+#         self.side_pan_every_n = 3  # do a sideways pan every Nth cycle
 
-        self.timer = self.create_timer(self.sweep_period_sec, self.sweep_callback)
+#         self.timer = self.create_timer(self.sweep_period_sec, self.sweep_callback)
 
-        self.get_logger().info("Head Sweep Node started")
+#         self.get_logger().info("Head Sweep Node started")
 
-    def sweep_callback(self):
-        if not self._action_client.server_is_ready():
-            self.get_logger().warn("Head controller action server not ready")
-            return
+#     def sweep_callback(self):
+#         if not self._action_client.server_is_ready():
+#             self.get_logger().warn("Head controller action server not ready")
+#             return
 
-        self.cycle_count += 1
-        do_side_pan = (self.cycle_count % self.side_pan_every_n == 0)
+#         self.cycle_count += 1
+#         do_side_pan = (self.cycle_count % self.side_pan_every_n == 0)
 
-        if do_side_pan:
-            waypoints = [
-                self.TILT_DOWN,
-                self.PAN_LEFT_DOWN,
-                self.PAN_RIGHT_DOWN,
-                self.NEUTRAL,
-            ]
-            self.get_logger().info("Head sweep: down + side pan (left/right)")
-        else:
-            waypoints = [
-                self.TILT_DOWN,
-                self.NEUTRAL,
-            ]
-            self.get_logger().info("Head sweep: down-tilt only")
+#         if do_side_pan:
+#             waypoints = [
+#                 self.TILT_DOWN,
+#                 self.PAN_LEFT_DOWN,
+#                 self.PAN_RIGHT_DOWN,
+#                 self.NEUTRAL,
+#             ]
+#             self.get_logger().info("Head sweep: down + side pan (left/right)")
+#         else:
+#             waypoints = [
+#                 self.TILT_DOWN,
+#                 self.NEUTRAL,
+#             ]
+#             self.get_logger().info("Head sweep: down-tilt only")
 
-        self.send_trajectory(waypoints)
+#         self.send_trajectory(waypoints)
 
-    def send_trajectory(self, waypoints):
-        goal_msg = FollowJointTrajectory.Goal()
-        goal_msg.trajectory.joint_names = self.joint_names
+#     def send_trajectory(self, waypoints):
+#         goal_msg = FollowJointTrajectory.Goal()
+#         goal_msg.trajectory.joint_names = self.joint_names
 
-        points = []
-        t = self.segment_duration_sec
-        for pan, tilt in waypoints:
-            pt = JointTrajectoryPoint()
-            pt.positions = [pan, tilt]
-            pt.velocities = [0.0, 0.0]
-            pt.time_from_start = Duration(seconds=t).to_msg()
-            points.append(pt)
-            t += self.segment_duration_sec
+#         points = []
+#         t = self.segment_duration_sec
+#         for pan, tilt in waypoints:
+#             pt = JointTrajectoryPoint()
+#             pt.positions = [pan, tilt]
+#             pt.velocities = [0.0, 0.0]
+#             pt.time_from_start = Duration(seconds=t).to_msg()
+#             points.append(pt)
+#             t += self.segment_duration_sec
 
-        goal_msg.trajectory.points = points
+#         goal_msg.trajectory.points = points
 
-        future = self._action_client.send_goal_async(goal_msg)
-        future.add_done_callback(self.goal_response_callback)
+#         future = self._action_client.send_goal_async(goal_msg)
+#         future.add_done_callback(self.goal_response_callback)
 
-    def goal_response_callback(self, future):
-        goal_handle = future.result()
-        if not goal_handle.accepted:
-            self.get_logger().warn("Head sweep goal rejected")
-            return
-        result_future = goal_handle.get_result_async()
-        result_future.add_done_callback(self.result_callback)
+#     def goal_response_callback(self, future):
+#         goal_handle = future.result()
+#         if not goal_handle.accepted:
+#             self.get_logger().warn("Head sweep goal rejected")
+#             return
+#         result_future = goal_handle.get_result_async()
+#         result_future.add_done_callback(self.result_callback)
 
-    def result_callback(self, future):
-        self.get_logger().info("Head sweep segment completed")
+#     def result_callback(self, future):
+#         self.get_logger().info("Head sweep segment completed")
 
 
 def main():
     rclpy.init()
     node = FullRunActionServer()
-    head_node = HeadSweepNode()
+    # head_node = HeadSweepNode()
 
     executor = MultiThreadedExecutor(num_threads=4)
     executor.add_node(node)
-    executor.add_node(head_node)
+    # executor.add_node(head_node)
     try:
         executor.spin()
     except KeyboardInterrupt:
         pass
     node.destroy_node()
-    head_node.destroy_node()
+    # head_node.destroy_node()
     rclpy.shutdown()
 
 

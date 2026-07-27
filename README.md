@@ -65,6 +65,13 @@ This single command:
 - After a 25s warm-up, starts the `fullrun` action server (`26ss_ar_final`) and the `tf_pauser` node
 - Starts `tf_follower`'s `costmap_clearer` node (3s stale-obstacle clear interval)
 
+<table>
+<tr>
+<td width="50%"><img width="100%" alt="Gazebo simulation" src="https://github.com/user-attachments/assets/f8fe9db8-a692-4f18-8628-aa10197bf7f8" /><br/><sub>Gazebo simulation</sub></td>
+<td width="50%"><img width="100%" alt="RViz — Nav2 view" src="https://github.com/user-attachments/assets/9efaca02-bb67-48a1-be11-b306607aa45e" /><br/><sub>RViz — Nav2 view</sub></td>
+</tr>
+</table>
+
 > Re-run `docker compose -f fullrun.yml up` (or restart the container) any time you edit `config/tiago_custom_fullrunv13.yaml` — Nav2 params are only picked up at launch.
 
 ### 3. Send a task goal
@@ -116,5 +123,5 @@ Odometry/wheel calibration for the simulated base lives in `src/pmb2_controller_
 Only **`fullrun.yml`** is needed to run the project — it covers all four tasks and the full run through the action server's `task` field. `task2.yml`, `task3.yml`, `task4.yml`, and `tiago_sim.yml` are earlier per-task compose variants, superseded by `fullrun.yml`, and kept only for reference.
 
 ## Authors
-Aarya Kulkarni, 
+Aarya Kulkarni,
 Aarish Bandiwadekar

@@ -1,7 +1,7 @@
 # TIAGo Autonomous Navigation — Final Project (26SS AR)
 
 **Course:** 26SS Autonomous Robotics (RWU)
-**Authors:** Aarya Kulkarni, Aarish Bandiwadekar
+**Authors:** Aarya Kulkarni
 
 ## Overview
 
@@ -123,5 +123,4 @@ Odometry/wheel calibration for the simulated base lives in `src/pmb2_controller_
 Only **`fullrun.yml`** is needed to run the project — it covers all four tasks and the full run through the action server's `task` field. `task2.yml`, `task3.yml`, `task4.yml`, and `tiago_sim.yml` are earlier per-task compose variants, superseded by `fullrun.yml`, and kept only for reference.
 
 ## Authors
-Aarya Kulkarni,
-Aarish Bandiwadekar
+Aarya Kulkarni

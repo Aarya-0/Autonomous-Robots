@@ -118,5 +118,5 @@ Only **`fullrun.yml`** is needed to run the project — it covers all four tasks
 
 ## Authors
 
-- ab-257929
-- ak-258066
+- ak-258066 (Aarya Kulkarni)
+- ab-257929 (Aarish Bandiwadekar)

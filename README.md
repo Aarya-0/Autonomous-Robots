@@ -3,6 +3,7 @@
 **Course:** 26SS Autonomous Robotics (RWU)
 **Authors:** Aarya Kulkarni
 
+▶️ **[Watch the demo video](https://drive.google.com/file/d/139yeoHu-ckhfCU77MxrKa2CilsqxYhzX/view?usp=sharing)**
 ## Overview
 
 This project runs a **TIAGo robot** (camera + lidar) in **Gazebo simulation**, tasked with **following a moving TF frame (`target_pose`) through a cluttered, partly-unmapped environment**. The mission logic is orchestrated by a single ROS2 action server, `fullrun` (package `26ss_ar_final`). Given a goal specifying a task, the robot:
